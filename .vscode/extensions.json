@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode", // Prettier
+    "dbaeumer.vscode-eslint", // ESLint
+    "xabikos.javascriptsnippets", // JavaScript (ES6) code snippets
+    "mhutchie.git-graph" // Git Graph
+  ]
+}

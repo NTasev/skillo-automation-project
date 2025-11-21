@@ -1,0 +1,20 @@
+{
+    "editor.formatOnSave": true, // This enables automatic code formatting whenever you save a file (manually using ctrl+S).
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit" //This setting tells VS Code to apply ESLint fixes automatically when you save a file. the "explicit" value ensures that ESLint uses the rules from your eslint.config.mjs file
+    },
+    "javascript.preferences.quoteStyle": "double", // This specifies that double quotes should be used for strings in JavaScript files. Prettier will respect this setting and format strings with double quotes instead of single quotes.
+    "files.autoSave": "afterDelay", // This enables automatic saving of files after a short delay when you stop typing.
+    "editor.defaultFormatter": "esbenp.prettier-vscode", //This sets Prettier as the default formatter for your project.
+    "editor.bracketPairColorization.enabled": true,
+    "editor.guides.bracketPairs": true
+}
+
+/*
+How These Settings Work Together
+When you save a file:
+Prettier formats the code (editor.formatOnSave + editor.defaultFormatter).
+ESLint fixes any linting issues (editor.codeActionsOnSave).
+Strings in JavaScript files will always use double quotes (javascript.preferences.quoteStyle).
+Files are automatically saved after a short delay, ensuring your changes are not lost (files.autoSave).
+*/
