@@ -3,6 +3,7 @@ import { BasePage } from "./BasePage.js";
 export class RegistrationPage extends BasePage {
   constructor(page) {
     super(page);
+    this.path = "/users/register";
 
     // Registration form locators
     this.usernameInput = this.page.locator("input[name='username']");
@@ -13,18 +14,14 @@ export class RegistrationPage extends BasePage {
       "#defaultRegisterPhonePassword"
     );
     this.publicInfoInput = this.page.locator("textarea[name='pulic-info']");
-    this.signInButon = this.page.locator("#sign-in-button");
-
-    // Positive feedback messages
+    this.signInButton = this.page.locator("#sign-in-button");
     this.successMessage = this.page.locator(".toast-container .toast-message");
-
-    // Negative feedback messages
-    this.invalidFeedback = page.locator(".invalid-feedback");
+    this.invalidFeedback = this.page.locator(".invalid-feedback");
   }
 
   // Navigate to registration page
-  async navigate() {
-    await super.goto("/users/register");
+  async goto() {
+    await super.goto(this.path);
   }
 
   // Form actions
@@ -53,19 +50,12 @@ export class RegistrationPage extends BasePage {
   }
 
   async signIn() {
-    await this.click(this.signInButon);
+    await this.click(this.signInButton);
   }
 
-  // Success toast
   async waitForSuccessMessage() {
-    await this.page.waitForSelector(".toast-container .toast-message", {
-      state: "visible",
-      timeout: 7000,
-    });
-  }
-
-  // Validation errors
-  async waitForInvalidFeedback() {
-    await this.invalidFeedback.first().waitFor({ state: "visible" });
+    await this.page
+      .locator(".toast-container .toast-message")
+      .waitFor({ state: "visible", timeout: 5000 });
   }
 }

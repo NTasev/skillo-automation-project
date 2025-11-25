@@ -1,6 +1,6 @@
 # 📘 Login – Test Cases
 
-# 🟢 TC01 – Successful Login
+## 🟢 TC01 – Successful Login
 
 Type: Positive
 Goal: Verify that a registered user can log in successfully.
@@ -25,7 +25,7 @@ Actual Result:
 
 User is logged in successfully, redirected to homepage.
 
-# 🔴 TC02 – Login Fails: Wrong Password
+### 🔴 TC02 – Login Fails: Wrong Password
 
 Type: Negative
 Goal: Ensure login is blocked when the password is incorrect.
@@ -50,7 +50,7 @@ Actual Result:
 
 Server displays “Wrong username or password”. User cannot log in and stays on the Login page.
 
-# 🔴 TC03 – Login Fails: Unregistered User
+### 🔴 TC03 – Login Fails: Unregistered User
 
 Type: Negative
 Goal: Ensure login fails if the user does not exist in the system.
@@ -75,7 +75,7 @@ Actual Result
 
 Server displays “Wrong username or password”. User remains on the login page; cannot log in.
 
-# 🔴 TC04 – Login Fails: Empty Credentials
+#### 🔴 TC04 – Login Fails: Empty Credentials
 
 Type: Negative
 Goal: Validate that login requires both username and password.

@@ -1,14 +1,25 @@
 {
-  "newUsers": [
+  "valid": [
+    { "username": "TasevNikolay", "password": "Password123!" },
+    { "username": "user@test.com", "password": "UserPass123!" },
+    { "username": "manager@test.com", "password": "Manager123!" }
+  ],
+
+  "invalid": [
     {
-      "username": "user001",
-      "email": "user001@example.com",
-      "password": "Password123!"
+      "username": "wronguser@test.com",
+      "password": "wrongpass",
+      "description": "wrong credentials"
     },
     {
-      "username": "user002",
-      "email": "user002@example.com",
-      "password": "Password123!"
+      "username": "",
+      "password": "Password123!",
+      "description": "empty username"
+    },
+    {
+      "username": "admin@test.com",
+      "password": "",
+      "description": "empty password"
     }
   ]
 }

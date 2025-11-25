@@ -1,11 +1,9 @@
-export function generateValidUsername(base = "user") {
-  // produce: user-<random 5 digits> (letters + digits, starts with letter)
+/* export function generateValidUsername(base = "user") {
   const n = Math.floor(Math.random() * 90000) + 10000;
   return `${base}${n}`; // e.g. user12345
 }
 
 export function generateValidEmail(base = "user") {
-  // use a safe domain and no unusual chars
   const n = Math.floor(Math.random() * 90000) + 10000;
   return `${base}${n}@mail.com`;
 }
@@ -22,3 +20,4 @@ export function generateRandomPublicInfo() {
   const hobby = hobbies[Math.floor(Math.random() * hobbies.length)];
   return `I love ${hobby}`;
 }
+*/

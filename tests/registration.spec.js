@@ -1,83 +1,68 @@
-import { test, expect } from "@playwright/test";
-import { RegistrationPage } from "../pages/RegistrationPage.js";
-import {
-  generateValidUsername,
-  generateValidEmail,
-  generateRandomDate,
-  generateRandomPublicInfo,
-} from "./utils.js";
+import { test, expect } from "./fixtures/base.js";
 
-const username = generateValidUsername();
-const email = generateValidEmail();
-const date = generateRandomDate();
-const info = generateRandomPublicInfo();
+test("Positive: Successful registration", async ({
+  registrationPage,
+  testUser,
+}) => {
+  await registrationPage.fillUsername(testUser.username);
+  await registrationPage.fillEmail(testUser.email);
+  await registrationPage.fillBirthDate(testUser.birthData);
+  await registrationPage.fillPassword(testUser.password);
+  await registrationPage.fillConfirmPassword(testUser.password);
+  await registrationPage.fillPublicInfo(testUser.publicInfo);
 
-let registration;
+  await registrationPage.signIn();
 
-test.beforeEach(async ({ page }) => {
-  registration = new RegistrationPage(page);
-  await registration.navigate();
+  await registrationPage.waitForSuccessMessage();
+  await expect(registrationPage.successMessage).toHaveText(
+    "Successful register!"
+  );
 });
 
-test("Positive: Successful registration", async () => {
-  await registration.fillUsername(username);
-  await registration.fillEmail(email);
-  await registration.fillBirthDate(date);
-  await registration.fillPassword("Password123!");
-  await registration.fillConfirmPassword("Password123!");
-  await registration.fillPublicInfo(info);
+test("Negative: Weak or Invalid Password", async ({
+  registrationPage,
+  invalidUser,
+}) => {
+  await registrationPage.fillUsername(invalidUser.username);
+  await registrationPage.fillEmail(invalidUser.email);
+  await registrationPage.fillBirthDate(invalidUser.birthData);
+  await registrationPage.fillPassword(invalidUser.password); // invalid: no uppercase
+  await registrationPage.fillConfirmPassword(invalidUser.password); // using the same weak password
+  await registrationPage.fillPublicInfo(invalidUser.publicInfo);
 
-  await registration.signIn();
-
-  await registration.waitForSuccessMessage();
-  await expect(registration.successMessage).toBeVisible();
-  await expect(registration.successMessage).toHaveText("Successful register!");
-});
-
-test("Negative: Weak or Invalid Password", async () => {
-  await registration.fillUsername(username);
-  await registration.fillEmail(email);
-  await registration.fillBirthDate(date);
-  await registration.fillPassword("password123"); // invalid: no uppercase
-  await registration.fillConfirmPassword("password123");
-  await registration.fillPublicInfo(info);
-
-  await registration.waitForInvalidFeedback();
-
-  await expect(registration.invalidFeedback).toBeVisible();
-  await expect(registration.invalidFeedback).toHaveText(
+  await expect(registrationPage.invalidFeedback).toBeVisible();
+  await expect(registrationPage.invalidFeedback).toHaveText(
     "Must contain digit and uppercase letter!"
   );
 });
 
-test("Negative: Password Do Not Match", async () => {
-  await registration.fillUsername(username);
-  await registration.fillEmail(email);
-  await registration.fillBirthDate(date);
-  await registration.fillPassword("Password123!");
-  await registration.fillConfirmPassword("password12"); // invalid: do not match
-  await registration.fillPublicInfo(info);
+test("Negative: Password Do Not Match", async ({
+  registrationPage,
+  invalidUser,
+}) => {
+  await registrationPage.fillUsername(invalidUser.username);
+  await registrationPage.fillEmail(invalidUser.email);
+  await registrationPage.fillBirthDate(invalidUser.birthData);
+  await registrationPage.fillPassword("Password123!"); // Valid password
+  await registrationPage.fillConfirmPassword(invalidUser.password); // Invalid: password123
+  await registrationPage.fillPublicInfo(invalidUser.publicInfo);
 
-  await registration.waitForInvalidFeedback();
-
-  await expect(registration.invalidFeedback).toBeVisible();
-  await expect(registration.invalidFeedback).toHaveText(
+  await expect(registrationPage.invalidFeedback).toBeVisible();
+  await expect(registrationPage.invalidFeedback).toHaveText(
     "Passwords do not match!"
   );
 });
 
-test("Negative: Missing username", async () => {
-  await registration.fillUsername("");
-  await registration.fillEmail(email);
-  await registration.fillBirthDate(date);
-  await registration.fillPassword("Password123!");
-  await registration.fillConfirmPassword("Password123!");
-  await registration.fillPublicInfo(info);
+test("Negative: Missing username", async ({ registrationPage, testUser }) => {
+  await registrationPage.fillUsername("");
+  await registrationPage.fillEmail(testUser.email);
+  await registrationPage.fillBirthDate(testUser.birthData);
+  await registrationPage.fillPassword(testUser.password);
+  await registrationPage.fillConfirmPassword(testUser.password);
+  await registrationPage.fillPublicInfo(testUser.publicInfo);
 
-  await registration.waitForInvalidFeedback();
-
-  await expect(registration.invalidFeedback).toBeVisible();
-  await expect(registration.invalidFeedback).toHaveText(
+  await expect(registrationPage.invalidFeedback).toBeVisible();
+  await expect(registrationPage.invalidFeedback).toHaveText(
     "This field is required!"
   );
 });

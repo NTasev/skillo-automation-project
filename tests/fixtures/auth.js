@@ -1,15 +1,14 @@
-import { test as base } from "./base.js";
-import LoginPage from "../../pages/LoginPage.js";
-import testData from "../../test-data/users.json";
+import { test as base } from "@playwright/test";
+import { LoginPage } from "../pages/LoginPage.js";
 
 export const test = base.extend({
   loggedInPage: async ({ page }, use) => {
-    const loginPage = new LoginPage(page);
-    await loginPage.goto();
-    await loginPage.login(
-      testData.validUser.username,
-      testData.validUser.password
-    );
+    const login = new LoginPage(page);
+    await login.goto();
+    // replace with real credentials or data from test-data/users.json
+    await login.login("existingUser", "Password123!");
+    // wait for URL or toast to ensure logged in
+    await page.waitForURL("**/posts/all");
     await use(page);
   },
 });
