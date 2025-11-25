@@ -54,8 +54,6 @@ export class RegistrationPage extends BasePage {
   }
 
   async waitForSuccessMessage() {
-    await this.page
-      .locator(".toast-container .toast-message")
-      .waitFor({ state: "visible", timeout: 5000 });
+    await this.successMessage.waitFor({ state: "visible", timeout: 5000 });
   }
 }

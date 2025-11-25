@@ -1,15 +1,10 @@
-import { test as base } from "@playwright/test";
-import { LoginPage } from "../pages/LoginPage.js";
+import { test as base } from "../fixtures/base.js";
+import { validUsers, invalidUsers } from "../authData.js";
 
 export const test = base.extend({
-  loggedInPage: async ({ page }, use) => {
-    const login = new LoginPage(page);
-    await login.goto();
-    // replace with real credentials or data from test-data/users.json
-    await login.login("existingUser", "Password123!");
-    // wait for URL or toast to ensure logged in
-    await page.waitForURL("**/posts/all");
-    await use(page);
+  // eslint-disable-next-line no-empty-pattern
+  authData: async ({}, use) => {
+    await use({ validUsers, invalidUsers });
   },
 });
 
