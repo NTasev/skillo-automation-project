@@ -1,19 +1,34 @@
-// pages/ProfilePage.js
-import { BasePage } from "./BasePage.js";
-
-export class ProfilePage extends BasePage {
+export class ProfilePage {
   constructor(page) {
-    super(page);
-    this.path = "/profile"; // adapt
-    this.userName = page.locator(".profile-username"); // adapt
-    this.posts = page.locator(".profile-post"); // adapt
+    this.page = page;
+
+    // Locators (adapt selectors as needed)
+    this.username = page.locator(".profile-username");
+    this.posts = page.locator(".profile-post");
   }
 
+  // Navigate to profile page
   async goto() {
-    await super.goto(this.path);
+    await this.page.goto("/profile");
   }
 
+  // Returns the username text
   async getUsernameText() {
-    return this.getText(this.userName);
+    return await this.username.textContent();
+  }
+
+  // Returns the count of posts from the profile
+  async getPostCount() {
+    return await this.posts.count();
+  }
+
+  // Get text content of post by index
+  async getPostText(index) {
+    return await this.posts.nth(index).textContent();
+  }
+
+  // Wait until profile is fully loaded
+  async waitForProfileLoaded() {
+    await this.username.waitFor({ state: "visible" });
   }
 }

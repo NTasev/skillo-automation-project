@@ -17,7 +17,7 @@ Steps to Reproduce:
 
 Expected Result:
 
-User is successfully logged in. Message "Successful login" appear.
+User is successfully logged in. Message "Successful login!" appear.
 
 Redirected to homepage.
 
@@ -44,7 +44,7 @@ Expected Result:
 
 User is successfully logged in.
 
-Message "Successful login" appears.
+Message "Successful login!" appears.
 
 User is redirected to the homepage.
 
@@ -83,7 +83,31 @@ Actual Result:
 
 Server displays “Wrong username or password”. User cannot log in and stays on the Login page.
 
-##### 🔴 TC04 – Login Fails: Unregistered User
+##### 🔴 TC04 – Login Fails: Empty Username Field
+
+Type: Negative
+Goal: Validate that login requires both username and password.
+
+Steps to Reproduce:
+
+1. Navigate to the Login page.
+
+2. Leave Username/Password empty.
+
+3. Click “Sign in”.
+
+Expected Result:
+
+Inline validation or server message shows: “Username and password are required.”
+
+Login is blocked.
+
+Actual Result:
+
+Form shows an error banner: “Wrong username or password”.
+User stays on the login page; no request is sent.
+
+###### 🔴 TC05 – Login Fails: Unregistered User
 
 Type: Negative
 Goal: Ensure login fails if the user does not exist in the system.
@@ -107,27 +131,3 @@ Login is blocked.
 Actual Result
 
 Server displays “Wrong username or password”. User remains on the login page; cannot log in.
-
-###### 🔴 TC05 – Login Fails: Empty Username Field
-
-Type: Negative
-Goal: Validate that login requires both username and password.
-
-Steps to Reproduce:
-
-1. Navigate to the Login page.
-
-2. Leave Username/Password empty.
-
-3. Click “Sign in”.
-
-Expected Result:
-
-Inline validation or server message shows: “Username and password are required.”
-
-Login is blocked.
-
-Actual Result:
-
-Form shows an error banner or inline message: “Wrong username or password”.
-User stays on the login page; no request is sent.

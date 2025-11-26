@@ -1,32 +1,45 @@
-// pages/NewPostPage.js
-import { BasePage } from "./BasePage.js";
-
-export class NewPostPage extends BasePage {
+export class NewPostPage {
   constructor(page) {
-    super(page);
-    this.path = "/posts/create"; // adapt
+    this.page = page;
+
+    // Form fields
     this.titleInput = page.locator('[name="title"]');
     this.descriptionInput = page.locator('[name="description"]');
     this.imageInput = page.locator('input[type="file"]');
-    this.submitButton = page.locator(
-      'role=button[name="Publish"], text=Publish'
-    );
+
+    // Buttons
+    this.submitButton = page.getByRole("button", { name: /publish/i });
+
+    // Toast message
     this.postSuccessToast = page
-      .locator(".toast-container")
+      .locator(".toast-container .toast-message")
       .filter({ hasText: "Post created" });
   }
 
+  // Navigate to new post creation page
   async goto() {
-    await super.goto(this.path);
+    await this.page.goto("/posts/create");
   }
 
+  // Create a post
   async createPost({ title, description, imagePath }) {
-    if (title) await this.fill(this.titleInput, title);
-    if (description) await this.fill(this.descriptionInput, description);
+    if (title !== undefined) {
+      await this.titleInput.fill(title);
+    }
+
+    if (description !== undefined) {
+      await this.descriptionInput.fill(description);
+    }
+
     if (imagePath) {
-      // file chooser based upload
       await this.imageInput.setInputFiles(imagePath);
     }
-    await this.click(this.submitButton);
+
+    await this.submitButton.click();
+  }
+
+  // Wait for toast confirmation
+  async waitForPostCreatedToast(timeout = 7000) {
+    await this.postSuccessToast.waitFor({ state: "visible", timeout });
   }
 }

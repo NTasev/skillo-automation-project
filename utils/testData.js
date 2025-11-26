@@ -5,9 +5,10 @@ export const validUsers = [
     password: "Password123!",
     description: "valid username and password",
   },
+
   {
-    username: "TasevNikolay",
-    email: "nikolay@example.com",
+    username: "NikolayTasev",
+    email: "tasev@example.com",
     password: "Password123!",
     description: "valid email and password",
   },
@@ -15,21 +16,21 @@ export const validUsers = [
 
 export const invalidUsers = [
   {
-    username: "user@example.com",
+    username: "userEmptyPassword",
     email: "user@example.com",
     password: "",
     description: "empty password field",
-  },
-  {
-    username: "unregisteredUser",
-    email: "unregistered@example.com",
-    password: "unregisteredPassword123",
-    description: "unregistered user",
   },
   {
     username: "",
     email: "empty@example.com",
     password: "emptyPassword123",
     description: "empty username field",
+  },
+  {
+    username: "unregisteredUser",
+    email: "unregistered@example.com",
+    password: "unregisteredPassword123",
+    description: "unregistered user",
   },
 ];

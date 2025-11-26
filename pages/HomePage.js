@@ -1,14 +1,16 @@
-import { BasePage } from "./BasePage.js";
-
-export class HomePage extends BasePage {
+export class HomePage {
   constructor(page) {
-    super(page);
+    this.page = page;
 
+    // Navigation
     this.homeButton = this.page.locator("#nav-link-home");
   }
 
+  async goto() {
+    await this.page.goto("/posts/all");
+  }
+
   async isLoaded() {
-    await this.page.waitForURL("**/posts/all");
-    await this.homeButton.waitFor({ state: "visible" });
+    await this.homeButton.waitFor({ state: "visible", timeout: 5000 });
   }
 }

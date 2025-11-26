@@ -1,9 +1,6 @@
-import { BasePage } from "./BasePage.js";
-
-export class RegistrationPage extends BasePage {
+export class RegistrationPage {
   constructor(page) {
-    super(page);
-
+    this.page = page;
     // Registration form locators
     this.usernameInput = this.page.locator("input[name='username']");
     this.emailInput = this.page.locator("input[type='email']");
@@ -20,36 +17,36 @@ export class RegistrationPage extends BasePage {
 
   // Navigate to registration page
   async goto() {
-    await super.goto("/users/register");
+    await this.page.goto("/users/register");
   }
 
   // Form actions
   async fillUsername(username) {
-    await this.type(this.usernameInput, username);
+    await this.usernameInput.fill(username);
   }
 
   async fillEmail(email) {
-    await this.type(this.emailInput, email);
+    await this.emailInput.fill(email);
   }
 
   async fillBirthDate(date) {
-    await this.type(this.birthDateInput, date);
+    await this.birthDateInput.fill(date);
   }
 
   async fillPassword(password) {
-    await this.type(this.passwordInput, password);
+    await this.passwordInput.fill(password);
   }
 
   async fillConfirmPassword(password) {
-    await this.type(this.confirmPasswordInput, password);
+    await this.confirmPasswordInput.fill(password);
   }
 
   async fillPublicInfo(info) {
-    await this.type(this.publicInfoInput, info);
+    await this.publicInfoInput.fill(info);
   }
 
   async signIn() {
-    await this.click(this.signInButton);
+    await this.signInButton.click();
   }
 
   async waitForSuccessMessage() {

@@ -1,40 +1,43 @@
-// pages/LoginPage.js
-import { BasePage } from "./BasePage.js";
-
-export class LoginPage extends BasePage {
+export class LoginPage {
   constructor(page) {
-    super(page);
-    this.path = "/users/login";
-    this.usernameInput = this.page.locator("#defaultLoginFormUsername");
-    this.passwordInput = this.page.locator("#defaultLoginFormPassword");
-    this.rememberMeButton = this.page.locator(
-      "input[type='remember-me-button ng-untouched ng-pristine ng-valid']"
-    );
-    this.signInButton = this.page.locator("#sign-in-button");
+    this.page = page;
 
-    // Feedback messages
-    this.invalidFeedback = page.locator(".invalid-feedback");
+    this.usernameInput = page.locator("#defaultLoginFormUsername");
+    this.passwordInput = page.locator("#defaultLoginFormPassword");
+    this.rememberMeButton = page.locator('[formcontrolname="rememberMe"]');
+    this.signInButton = page.locator("#sign-in-button");
+    this.errorMessage = page.locator(".invalid-feedback");
     this.successMessage = page.locator(".toast-container .toast-message");
+    this.loginNavLink = page.locator("#nav-link-login");
   }
 
   async goto() {
-    await super.goto(this.path);
+    await this.page.goto("/users/login");
   }
 
-  async login(username, password) {
-    await this.type(this.usernameInput, username);
-    await this.type(this.passwordInput, password);
-    await this.click(this.rememberMeButton);
-    await this.click(this.signInButton);
+  async login(username, password, rememberMe = false) {
+    await this.usernameInput.fill(username);
+    await this.passwordInput.fill(password);
+
+    if (rememberMe) {
+      await this.rememberMeButton.click();
+    }
+
+    // Click only if button is enabled
+    if (await this.signInButton.isEnabled()) {
+      await this.signInButton.click();
+    }
   }
 
-  // Wait for success toast
-  async waitForSuccessMessage(timeout = 7000) {
-    await this.successMessage.waitFor({ state: "visible", timeout });
+  async waitForSuccessMessage() {
+    await this.successMessage.waitFor({ state: "visible" });
   }
 
-  // Wait for validation error
-  async waitForInvalidFeedback(timeout = 7000) {
-    await this.invalidFeedback.first().waitFor({ state: "visible", timeout });
+  async waitForErrorMessage() {
+    await this.errorMessage.waitFor({ state: "visible" });
+  }
+
+  async isLoginPage() {
+    await this.loginNavLink.waitFor({ state: "visible" });
   }
 }
