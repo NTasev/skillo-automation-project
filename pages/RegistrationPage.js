@@ -3,7 +3,6 @@ import { BasePage } from "./BasePage.js";
 export class RegistrationPage extends BasePage {
   constructor(page) {
     super(page);
-    this.path = "/users/register";
 
     // Registration form locators
     this.usernameInput = this.page.locator("input[name='username']");
@@ -21,7 +20,7 @@ export class RegistrationPage extends BasePage {
 
   // Navigate to registration page
   async goto() {
-    await super.goto(this.path);
+    await super.goto("/users/register");
   }
 
   // Form actions

@@ -1,5 +1,5 @@
 import { test, expect } from "./fixtures/base.js";
-import { generateUsername, generateEmail } from "./utils.js";
+import { generateUsername, generateEmail } from "../utils/helpers.js";
 
 test.beforeEach(async ({ registrationPage }) => {
   await registrationPage.goto();

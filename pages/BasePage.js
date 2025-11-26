@@ -2,13 +2,14 @@ export class BasePage {
   constructor(page) {
     this.page = page;
   }
+
   async goto(path) {
-    await this.page.goto(`http://training.skillo-bg.com:4300${path}`, {
-      waitUntil: "networkidle",
+    await this.page.goto(path, {
+      waitUntil: "domcontentloaded",
     });
   }
 
-  // ---- Interaction Helpers ----
+  // Interaction Helpers
   async click(locator) {
     await locator.waitFor({ state: "visible" });
     await locator.click();
