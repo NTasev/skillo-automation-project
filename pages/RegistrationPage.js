@@ -11,7 +11,8 @@ export class RegistrationPage {
     );
     this.publicInfoInput = this.page.locator("textarea[name='pulic-info']");
     this.signInButton = this.page.locator("#sign-in-button");
-    this.successMessage = this.page.locator(".toast-container .toast-message");
+    this.signUpHeader = this.page.locator("h4");
+    this.toastContainer = this.page.locator(".toast-container");
     this.invalidFeedback = this.page.locator(".invalid-feedback");
   }
 
@@ -37,19 +38,45 @@ export class RegistrationPage {
     await this.passwordInput.fill(password);
   }
 
-  async fillConfirmPassword(password) {
-    await this.confirmPasswordInput.fill(password);
+  async fillConfirmPassword(confirmPassword) {
+    await this.confirmPasswordInput.fill(confirmPassword);
   }
 
   async fillPublicInfo(info) {
     await this.publicInfoInput.fill(info);
   }
-
-  async signIn() {
-    await this.signInButton.click();
+  
+  // Button check
+  async isSignInButtonEnabled() {
+    return await this.signInButton.isEnabled();
   }
 
-  async waitForSuccessMessage() {
-    await this.successMessage.waitFor({ state: "visible", timeout: 5000 });
+  // Click button with same logic as loginPage
+  async clickSignIn() {
+    const enabled = await this.signInButton.isEnabled();
+    if (enabled) {
+      console.log("Sign Up button is enabled. Clicking it.");
+      await this.signInButton.click();
+    } else {
+      console.log("Sign Up button is disabled. Cannot click (UI validation).");
+    }
+  }
+
+  async registration({
+    username,
+    email,
+    date,
+    password,
+    confirmPassword,
+    info,
+  }) {
+    await this.usernameInput.fill(username);
+    await this.emailInput.fill(email);
+    await this.birthDateInput.fill(date);
+    await this.passwordInput.fill(password);
+    await this.confirmPasswordInput.fill(confirmPassword);
+    await this.publicInfoInput.fill(info);
+
+    await this.clickSignIn(); // clicks only if enabled
   }
 }

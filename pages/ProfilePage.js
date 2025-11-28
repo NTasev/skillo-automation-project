@@ -3,32 +3,22 @@ export class ProfilePage {
     this.page = page;
 
     // Locators (adapt selectors as needed)
-    this.username = page.locator(".profile-username");
-    this.posts = page.locator(".profile-post");
+    this.profileName = this.page.locator("div.profile-user-settings h2");
+    this.profilePost = this.page.locator(".profile-post img");
   }
 
-  // Navigate to profile page
-  async goto() {
-    await this.page.goto("/profile");
-  }
-
-  // Returns the username text
-  async getUsernameText() {
-    return await this.username.textContent();
-  }
-
-  // Returns the count of posts from the profile
-  async getPostCount() {
-    return await this.posts.count();
-  }
-
-  // Get text content of post by index
-  async getPostText(index) {
-    return await this.posts.nth(index).textContent();
+  // Get username text after navigating via HomePage
+  async getProfileName() {
+    return this.profileName.textContent({ state: "visible", timeout: 10000 });
   }
 
   // Wait until profile is fully loaded
-  async waitForProfileLoaded() {
-    await this.username.waitFor({ state: "visible" });
+  async goToProfile() {
+    await this.profileLink.click();
+    await this.page.waitForLoadState("networkidle"); // wait for all requests
+  }
+
+  async waitForProfileName() {
+    await this.profileName.waitFor({ state: "visible", timeout: 10000 });
   }
 }

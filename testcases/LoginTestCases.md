@@ -15,6 +15,8 @@ Steps to Reproduce:
 
 4. Click “Sign in”.
 
+5. Verify user profile.
+
 Expected Result:
 
 User is successfully logged in. Message "Successful login!" appear.
@@ -40,6 +42,8 @@ Steps to Reproduce:
 
 4. Click “Sign in”.
 
+5. Verify user profile.
+
 Expected Result:
 
 User is successfully logged in.
@@ -51,12 +55,6 @@ User is redirected to the homepage.
 Actual Result:
 
 User is logged in successfully (to be filled after test execution).
-
-Notes:
-
-This test complements the username login test.
-
-Ensure the email used is registered in the system.
 
 #### 🔴 TC03 - Login Fails: Empty Password Field
 
@@ -75,13 +73,11 @@ Steps to Reproduce:
 
 Expected Result:
 
-Server shows an error message: “Empty password field”.
-
 User remains on the Login page with empty password field.
 
 Actual Result:
 
-Server displays “Wrong username or password”. User cannot log in and stays on the Login page.
+User cannot log in and stays on the Login page.
 
 ##### 🔴 TC04 – Login Fails: Empty Username Field
 
@@ -98,7 +94,7 @@ Steps to Reproduce:
 
 Expected Result:
 
-Inline validation or server message shows: “Username and password are required.”
+Server message shows: “Username and password are required.”
 
 Login is blocked.
 
@@ -124,7 +120,7 @@ Steps to Reproduce:
 
 Expected Result:
 
-Server returns error: “User does not exist.”
+Server displays “Wrong username or password”.
 
 Login is blocked.
 

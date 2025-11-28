@@ -4,40 +4,50 @@ export class LoginPage {
 
     this.usernameInput = page.locator("#defaultLoginFormUsername");
     this.passwordInput = page.locator("#defaultLoginFormPassword");
-    this.rememberMeButton = page.locator('[formcontrolname="rememberMe"]');
     this.signInButton = page.locator("#sign-in-button");
-    this.errorMessage = page.locator(".invalid-feedback");
-    this.successMessage = page.locator(".toast-container .toast-message");
-    this.loginNavLink = page.locator("#nav-link-login");
+    this.signInHeader = page.locator("p.h4.mb-4");
+    this.toastMessage = page.locator("div.toast-message"); // unified for success/error
+    this.rememberMeCheckbox = page.locator('[formcontrolname="rememberMe"]');
   }
 
   async goto() {
     await this.page.goto("/users/login");
   }
 
-  async login(username, password, rememberMe = false) {
+  async fillUsername(username) {
     await this.usernameInput.fill(username);
+  }
+
+  async fillPassword(password) {
     await this.passwordInput.fill(password);
+  }
 
-    if (rememberMe) {
-      await this.rememberMeButton.click();
+  async checkRememberMe(shouldCheck = true) {
+    const isChecked = await this.rememberMeCheckbox.isChecked();
+
+    if (isChecked !== shouldCheck) {
+      console.log("Toggling Remember Me checkbox");
+      await this.rememberMeCheckbox.click();
+      // tiny wait for UI to catch up
+      await this.page.waitForTimeout(50);
     }
+  }
 
-    // Click only if button is enabled
-    if (await this.signInButton.isEnabled()) {
+  async clickSignIn() {
+    const enabled = await this.signInButton.isEnabled();
+
+    if (enabled) {
+      console.log("Sign In button is enabled. Clicking it.");
       await this.signInButton.click();
+    } else {
+      console.log("Sign In button is disabled. Cannot click.");
     }
   }
 
-  async waitForSuccessMessage() {
-    await this.successMessage.waitFor({ state: "visible" });
-  }
-
-  async waitForErrorMessage() {
-    await this.errorMessage.waitFor({ state: "visible" });
-  }
-
-  async isLoginPage() {
-    await this.loginNavLink.waitFor({ state: "visible" });
+  async login(username, password, rememberMe = false) {
+    await this.fillUsername(username);
+    await this.fillPassword(password);
+    if (rememberMe) await this.checkRememberMe(true);
+    await this.clickSignIn();
   }
 }

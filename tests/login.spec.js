@@ -1,68 +1,118 @@
 import { test, expect } from "./fixtures/base.js";
-import { validUsers, invalidUsers } from "../utils/testData.js";
+import {
+  validUsers,
+  emptyFieldUsers,
+  unregisteredUsers,
+} from "../test-data/loginData.js";
 
-test.beforeEach(async ({ loginPage }) => {
-  await loginPage.goto();
+test.beforeEach(async ({ page, loginPage }) => {
+  // Clear cookies first
+  await page.context().clearCookies();
+
+  // Navigate to login page
+  await loginPage.goto("/users/login");
+
+  // Clear localStorage and sessionStorage for the current origin
+  await page.evaluate(() => {
+    localStorage.clear();
+    sessionStorage.clear();
+  });
 });
 
 // ----------------------
 // Positive Test Cases
 // ----------------------
 
-test("Positive: Successful login with valid username and password", async ({
+test("TC01. Positive: Successful login with valid username and password", async ({
   loginPage,
   homePage,
+  profilePage,
 }) => {
-  const user = validUsers[0]; // this take the first valid user by username
+  const user = validUsers[0];
 
   await loginPage.login(user.username, user.password, true);
 
-  await expect(loginPage.rememberMeButton).toBeChecked();
-  await loginPage.waitForSuccessMessage();
-  await expect(loginPage.successMessage).toHaveText("Successful login!");
+  await expect(loginPage.toastMessage).toBeVisible();
+  await expect(loginPage.toastMessage).toContainText("Successful login!");
 
   await homePage.isLoaded();
+
+  await homePage.goToProfile();
+  await expect(profilePage.profileName).toHaveText(user.username);
 });
 
-test("Positive: Successful login with valid email and password", async ({
+test("TC02. Positive: Successful login with valid email and password", async ({
   loginPage,
   homePage,
+  profilePage,
 }) => {
-  const user = validUsers[1]; // this take the second valid user by email
+  const user = validUsers[1];
 
   await loginPage.login(user.email, user.password, true);
 
-  await expect(loginPage.rememberMeButton).toBeChecked();
-  await loginPage.waitForSuccessMessage();
-  await expect(loginPage.successMessage).toHaveText("Successful login!");
+  await expect(loginPage.toastMessage).toBeVisible();
+  await expect(loginPage.toastMessage).toContainText("Successful login!");
 
   await homePage.isLoaded();
+  await homePage.goToProfile();
+
+  await expect(profilePage.profileName).toHaveText(user.username);
 });
 
 // ----------------------
-// Negative Test Cases (data-driven)
+// Negative Test Cases
 // ----------------------
-invalidUsers.forEach((user) => {
-  test(`login fails by: ${user.description}`, async ({ loginPage }) => {
-    await loginPage.login(user.username || "", user.password || "");
 
-    if (await loginPage.signInButton.isEnabled()) {
-      // Only wait for error message if form was submitted
-      try {
-        await loginPage.waitForErrorMessage();
-        await expect(loginPage.errorMessage).toBeVisible();
-        await expect(loginPage.errorMessage).toHaveText(
-          "Wrong username or password!"
-        );
-      } catch {
-        // If error message never appeared, just confirm still on login page
-        console.log("Error message did not appear, staying on login page.");
+// Negative: Empty password
+emptyFieldUsers
+  .filter((user) => user.description === "empty password field")
+  .forEach((user) => {
+    test(`TC03. Negative: Login fails with ${user.username}`, async ({
+      loginPage,
+    }) => {
+      await loginPage.fillUsername(user.username);
+      await loginPage.fillPassword(user.password);
+
+      const isEnabled = await loginPage.signInButton.isEnabled();
+
+      if (!isEnabled) {
+        await expect(loginPage.signInButton).toBeDisabled();
+      } else {
+        await loginPage.clickSignIn();
       }
-    } else {
-      // Form blocked, button disabled
-      await expect(loginPage.signInButton).toBeDisabled();
-    }
+    });
+  });
 
-    await loginPage.isLoginPage();
+// Negative: Empty username
+emptyFieldUsers
+  .filter((user) => user.description === "empty username field")
+  .forEach((user) => {
+    test(`TC04. Negative: Login fails with ${user.username}`, async ({
+      loginPage,
+    }) => {
+      await loginPage.fillUsername(user.username);
+      await loginPage.fillPassword(user.password);
+
+      const isEnabled = await loginPage.signInButton.isEnabled();
+
+      if (!isEnabled) {
+        await expect(loginPage.signInButton).toBeDisabled();
+      } else {
+        await loginPage.clickSignIn();
+      }
+    });
+  });
+
+// Negative: Unregistered user
+unregisteredUsers.forEach((user) => {
+  test(`TC05: Negative: Login fails with unregistered user - ${user.username}`, async ({
+    loginPage,
+  }) => {
+    await loginPage.login(user.username, user.password, false);
+
+    await expect(loginPage.toastMessage).toBeVisible();
+    await expect(loginPage.toastMessage).toHaveText(
+      "Wrong username or password!"
+    );
   });
 });

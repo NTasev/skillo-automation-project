@@ -1,3 +1,4 @@
+// Positive users
 export const validUsers = [
   {
     username: "TasevNikolay",
@@ -5,7 +6,6 @@ export const validUsers = [
     password: "Password123!",
     description: "valid username and password",
   },
-
   {
     username: "NikolayTasev",
     email: "tasev@example.com",
@@ -14,7 +14,8 @@ export const validUsers = [
   },
 ];
 
-export const invalidUsers = [
+// Negative users: empty fields
+export const emptyFieldUsers = [
   {
     username: "userEmptyPassword",
     email: "user@example.com",
@@ -28,9 +29,25 @@ export const invalidUsers = [
     description: "empty username field",
   },
   {
+    username: "",
+    email: "empty@example.com",
+    password: "",
+    description: "both username and password empty",
+  },
+];
+
+// Negative users: unregistered
+export const unregisteredUsers = [
+  {
     username: "unregisteredUser",
     email: "unregistered@example.com",
     password: "unregisteredPassword123",
     description: "unregistered user",
+  },
+  {
+    username: "ghostUser",
+    email: "ghost@example.com",
+    password: "GhostPassword123",
+    description: "another unregistered user",
   },
 ];
