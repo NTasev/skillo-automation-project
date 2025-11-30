@@ -45,21 +45,13 @@ export class RegistrationPage {
   async fillPublicInfo(info) {
     await this.publicInfoInput.fill(info);
   }
-  
-  // Button check
-  async isSignInButtonEnabled() {
-    return await this.signInButton.isEnabled();
-  }
 
-  // Click button with same logic as loginPage
-  async clickSignIn() {
-    const enabled = await this.signInButton.isEnabled();
-    if (enabled) {
-      console.log("Sign Up button is enabled. Clicking it.");
+  async submitIfEnabled() {
+    const isEnabled = await this.signInButton.isEnabled();
+    if (isEnabled) {
       await this.signInButton.click();
-    } else {
-      console.log("Sign Up button is disabled. Cannot click (UI validation).");
-    }
+      return true;
+    } else return false;
   }
 
   async registration({
@@ -77,6 +69,6 @@ export class RegistrationPage {
     await this.confirmPasswordInput.fill(confirmPassword);
     await this.publicInfoInput.fill(info);
 
-    await this.clickSignIn(); // clicks only if enabled
+    await this.signInButton.click();
   }
 }

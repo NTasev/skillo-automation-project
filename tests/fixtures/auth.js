@@ -1,10 +1,27 @@
-import { test as base } from "../fixtures/base.js";
-import { validUsers, invalidUsers } from "../authData.js";
+import { test as base } from "./base.js";
+import { LoginPage } from "../../pages/LoginPage.js";
 
 export const test = base.extend({
-  // eslint-disable-next-line no-empty-pattern
-  authData: async ({}, use) => {
-    await use({ validUsers, invalidUsers });
+  // Override page so all tests start logged in
+  authUser: async ({ page }, use) => {
+    const loginPage = new LoginPage(page);
+
+    // Perform login
+    await loginPage.goto(); // make sure you navigate to login page first
+    await loginPage.login("TasevNikolay", "Password123!");
+
+    // Wait for toast to appear
+    await page.waitForSelector("div.toast-message");
+
+    // Pass the logged-in page to the test
+    await use(page);
+
+    // Cleanup
+    await page.context().clearCookies();
+    await page.evaluate(() => {
+      localStorage.clear();
+      sessionStorage.clear();
+    });
   },
 });
 

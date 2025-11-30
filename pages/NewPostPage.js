@@ -2,44 +2,56 @@ export class NewPostPage {
   constructor(page) {
     this.page = page;
 
-    // Form fields
-    this.titleInput = page.locator('[name="title"]');
-    this.descriptionInput = page.locator('[name="description"]');
-    this.imageInput = page.locator('input[type="file"]');
+    // Page elements
+    this.postHeading = this.page.locator("h3");
+    this.browseButton = this.page.locator("#choose-file");
+    this.imagePreview = this.page.locator(".image-preview");
+    this.captionInput = this.page.locator('input[name="caption"]');
 
     // Buttons
-    this.submitButton = page.getByRole("button", { name: /publish/i });
+    this.postStatusCheckbox = page.locator("#customSwitch2");
+    this.createPostButton = page.locator("#create-post");
 
-    // Toast message
-    this.postSuccessToast = page
-      .locator(".toast-container .toast-message")
-      .filter({ hasText: "Post created" });
+    // Correct file input (hidden Angular input)
+    this.hiddenFileInput = page
+      .locator('input[type="file"][formcontrolname="coverUrl"]')
+      .first();
+
+    this.postSuccessToast = page.locator("div.toast-message");
   }
 
-  // Navigate to new post creation page
   async goto() {
     await this.page.goto("/posts/create");
+    await this.page.waitForLoadState("networkidle");
   }
 
-  // Create a post
-  async createPost({ title, description, imagePath }) {
-    if (title !== undefined) {
-      await this.titleInput.fill(title);
-    }
+  async uploadImage(filePath) {
+    // Ensure the hidden input exists
+    await this.hiddenFileInput.waitFor({ state: "attached" });
 
-    if (description !== undefined) {
-      await this.descriptionInput.fill(description);
-    }
-
-    if (imagePath) {
-      await this.imageInput.setInputFiles(imagePath);
-    }
-
-    await this.submitButton.click();
+    // Upload file
+    await this.hiddenFileInput.setInputFiles(filePath);
   }
 
-  // Wait for toast confirmation
-  async waitForPostCreatedToast(timeout = 7000) {
-    await this.postSuccessToast.waitFor({ state: "visible", timeout });
+  async setCaption(text) {
+    await this.captionInput.fill(text);
+  }
+
+  async setPostStatus(publicStatus = true) {
+    const currentlyChecked = await this.postStatusCheckbox.isChecked();
+    if (currentlyChecked !== publicStatus) {
+      await this.postStatusCheckbox.click();
+    }
+  }
+
+  async submitPost() {
+    await this.createPostButton.click();
+  }
+
+  async createPostFull({ filePath, caption, publicStatus = true }) {
+    await this.uploadImage(filePath);
+    if (caption) await this.setCaption(caption);
+    await this.setPostStatus(publicStatus);
+    await this.submitPost();
   }
 }

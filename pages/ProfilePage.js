@@ -2,23 +2,25 @@ export class ProfilePage {
   constructor(page) {
     this.page = page;
 
-    // Locators (adapt selectors as needed)
-    this.profileName = this.page.locator("div.profile-user-settings h2");
-    this.profilePost = this.page.locator(".profile-post img");
+    // Locators for profile elements
+    this.profileName = this.page.locator(".profile-user-settings h2");
+    this.profilePost = this.page.locator("div.gallery-item");
+
+    // Locators for post elements
+    this.postImage = this.page.locator("div.post-modal-img img");
+    this.postUsername = this.page.locator("a.post-user");
+    this.postTitle = this.page.locator("div.post-title");
   }
 
-  // Get username text after navigating via HomePage
-  async getProfileName() {
-    return this.profileName.textContent({ state: "visible", timeout: 10000 });
+  async goto() {
+    await this.page.goto("/users/");
+    await this.page.waitForLoadState("networkidle");
   }
 
-  // Wait until profile is fully loaded
-  async goToProfile() {
-    await this.profileLink.click();
-    await this.page.waitForLoadState("networkidle"); // wait for all requests
-  }
-
-  async waitForProfileName() {
+  //Loading page profile - using it for login page validation
+  async isLoaded() {
     await this.profileName.waitFor({ state: "visible", timeout: 10000 });
   }
+
+  async getLastPost() {}
 }

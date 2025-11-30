@@ -3,6 +3,7 @@ import { generateUsername, generateEmail } from "../utils/helpers.js";
 import { invalidData } from "../test-data/registrationData.js";
 
 test.beforeEach(async ({ registrationPage }) => {
+  // Navigate to the page first
   await registrationPage.goto();
 });
 
@@ -10,7 +11,7 @@ test.beforeEach(async ({ registrationPage }) => {
 // Positive test case
 // ---------------------------
 
-test("TC01.Positive: Should register with valid user credentials", async ({
+test("✅TC01.Positive: Should register with valid user credentials", async ({
   registrationPage,
   homePage,
 }) => {
@@ -40,7 +41,7 @@ test("TC01.Positive: Should register with valid user credentials", async ({
 // ---------------------------
 // Negative test cases
 // ---------------------------
-test("TC02.Negative: Registration fails with weak password", async ({
+test("❌TC02.Negative: Registration fails with weak password", async ({
   registrationPage,
 }) => {
   await registrationPage.fillUsername(invalidData[0].username);
@@ -50,12 +51,8 @@ test("TC02.Negative: Registration fails with weak password", async ({
   await registrationPage.fillConfirmPassword(invalidData[0].confirmPassword);
   await registrationPage.fillPublicInfo(invalidData[0].info);
 
-  const isEnabled = await registrationPage.isSignInButtonEnabled();
-
-  if (!isEnabled) {
-    console.log("Sign Up button is disabled (UI validation).");
-  }
-  await registrationPage.clickSignIn();
+  const clicked = await registrationPage.submitIfEnabled();
+  await expect(clicked).toBe(false);
 
   await expect(registrationPage.invalidFeedback).toBeVisible();
   await expect(registrationPage.invalidFeedback).toHaveText(
@@ -64,7 +61,7 @@ test("TC02.Negative: Registration fails with weak password", async ({
   await expect(registrationPage.signUpHeader).toHaveText("Sign up");
 });
 
-test("TC03.Negative: Registration fails when passwords do not match", async ({
+test("❌TC03.Negative: Registration fails when passwords do not match", async ({
   registrationPage,
 }) => {
   await registrationPage.fillUsername(invalidData[1].username);
@@ -74,12 +71,8 @@ test("TC03.Negative: Registration fails when passwords do not match", async ({
   await registrationPage.fillConfirmPassword(invalidData[1].confirmPassword);
   await registrationPage.fillPublicInfo(invalidData[1].info);
 
-  const isEnabled = await registrationPage.isSignInButtonEnabled();
-
-  if (!isEnabled) {
-    console.log("Sign Up button is disabled (UI validation).");
-  }
-  await registrationPage.clickSignIn();
+  const clicked = await registrationPage.submitIfEnabled();
+  await expect(clicked).toBe(false);
 
   await expect(registrationPage.invalidFeedback).toBeVisible();
   await expect(registrationPage.invalidFeedback).toHaveText(
@@ -88,7 +81,7 @@ test("TC03.Negative: Registration fails when passwords do not match", async ({
   await expect(registrationPage.signUpHeader).toHaveText("Sign up");
 });
 
-test("TC04.Negative: Registration fails with missing username", async ({
+test("❌TC04.Negative: Registration fails with missing username", async ({
   registrationPage,
 }) => {
   await registrationPage.fillUsername(invalidData[2].username);
@@ -98,12 +91,8 @@ test("TC04.Negative: Registration fails with missing username", async ({
   await registrationPage.fillConfirmPassword(invalidData[2].confirmPassword);
   await registrationPage.fillPublicInfo(invalidData[2].info);
 
-  const isEnabled = await registrationPage.isSignInButtonEnabled();
-
-  if (!isEnabled) {
-    console.log("Sign Up button is disabled (UI validation).");
-  }
-  await registrationPage.clickSignIn();
+  const clicked = await registrationPage.submitIfEnabled();
+  await expect(clicked).toBe(false);
 
   await expect(registrationPage.invalidFeedback).toBeVisible();
   await expect(registrationPage.invalidFeedback).toHaveText(

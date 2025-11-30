@@ -4,7 +4,7 @@ export class HomePage {
 
     this.linkProfile = this.page.locator("#nav-link-profile");
     this.linkNewPost = this.page.locator("#nav-link-new-post");
-    this.linkLogout = this.page.locator("#nav-link-logout");
+    this.logoutButton = this.page.locator("i.fas.fa-sign-out-alt.fa-lg");
   }
 
   async goto() {
@@ -12,22 +12,33 @@ export class HomePage {
   }
 
   async isLoaded() {
-    await this.linkProfile.waitFor({ state: "visible" });
     await this.page.waitForLoadState("networkidle");
+    await this.linkProfile.waitFor({ state: "visible", timeout: 5000 });
+    await this.linkNewPost.waitFor({ state: "visible", timeout: 5000 });
   }
 
   async goToProfile() {
-    await Promise.all([
-      this.page.waitForLoadState("networkidle"),
-      this.linkProfile.click(),
-    ]);
+    await this.page.waitForLoadState("networkidle");
+    await this.linkProfile.click();
   }
 
   async goToNewPost() {
     await this.linkNewPost.click();
   }
 
+  async ensureLogoutVisible() {
+    // Check if logout button is visible
+    if (!(await this.logoutButton.isVisible())) {
+      // Click the hamburger menu
+      const menuButton = this.page.locator("button.navbar-toggler");
+      await menuButton.click();
+    }
+    // Wait for logout button to be visible
+    await this.logoutButton.waitFor({ state: "visible", timeout: 5000 });
+  }
+
   async logout() {
-    await this.linkLogout.click();
+    await this.ensureLogoutVisible(); // make sure logout button is visible
+    await this.logoutButton.click();
   }
 }

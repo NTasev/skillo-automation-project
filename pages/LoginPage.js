@@ -22,32 +22,35 @@ export class LoginPage {
     await this.passwordInput.fill(password);
   }
 
-  async checkRememberMe(shouldCheck = true) {
+  async checkRememberMe(shouldCheck = false) {
+    // Wait for the checkbox to be attached to the DOM and visible
+    await this.rememberMeCheckbox.waitFor({ state: "attached", timeout: 5000 });
+    await this.rememberMeCheckbox.waitFor({ state: "visible", timeout: 5000 });
+
+    // Get current checked state
     const isChecked = await this.rememberMeCheckbox.isChecked();
 
     if (isChecked !== shouldCheck) {
-      console.log("Toggling Remember Me checkbox");
-      await this.rememberMeCheckbox.click();
-      // tiny wait for UI to catch up
-      await this.page.waitForTimeout(50);
+      if (shouldCheck) {
+        await this.rememberMeCheckbox.check();
+      } else {
+        await this.rememberMeCheckbox.uncheck();
+      }
     }
   }
 
-  async clickSignIn() {
-    const enabled = await this.signInButton.isEnabled();
-
-    if (enabled) {
-      console.log("Sign In button is enabled. Clicking it.");
+  async submitIfEnabled() {
+    const isEnabled = await this.signInButton.isEnabled();
+    if (isEnabled) {
       await this.signInButton.click();
-    } else {
-      console.log("Sign In button is disabled. Cannot click.");
-    }
+      return true;
+    } else return false;
   }
 
-  async login(username, password, rememberMe = false) {
+  async login(username, password, rememberMe = true) {
     await this.fillUsername(username);
     await this.fillPassword(password);
-    if (rememberMe) await this.checkRememberMe(true);
-    await this.clickSignIn();
+    await this.checkRememberMe(rememberMe);
+    await this.signInButton.click();
   }
 }
