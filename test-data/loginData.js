@@ -1,4 +1,4 @@
-// Positive users
+// Positive users: valid credentials
 export const validUsers = [
   {
     username: "TasevNikolay",
@@ -14,7 +14,7 @@ export const validUsers = [
   },
 ];
 
-// Negative users: empty fields
+// Negative users: invalid credentials
 export const emptyFieldUsers = [
   {
     username: "userEmptyPassword",
@@ -36,7 +36,7 @@ export const emptyFieldUsers = [
   },
 ];
 
-// Negative users: unregistered
+// Unregistered users: credentials not in the system
 export const unregisteredUsers = [
   {
     username: "unregisteredUser",

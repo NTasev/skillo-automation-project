@@ -1,6 +1,7 @@
 export class RegistrationPage {
   constructor(page) {
     this.page = page;
+
     // Registration form locators
     this.usernameInput = this.page.locator("input[name='username']");
     this.emailInput = this.page.locator("input[type='email']");
@@ -12,6 +13,8 @@ export class RegistrationPage {
     this.publicInfoInput = this.page.locator("textarea[name='pulic-info']");
     this.signInButton = this.page.locator("#sign-in-button");
     this.signUpHeader = this.page.locator("h4");
+
+    // Feedback locators
     this.toastContainer = this.page.locator(".toast-container");
     this.invalidFeedback = this.page.locator(".invalid-feedback");
   }
@@ -54,6 +57,7 @@ export class RegistrationPage {
     } else return false;
   }
 
+  // Perform full registration action
   async registration({
     username,
     email,

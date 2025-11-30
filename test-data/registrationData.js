@@ -1,3 +1,4 @@
+// Invalid registration data for negative test cases
 export const invalidData = [
   {
     testName: "password is invalid",

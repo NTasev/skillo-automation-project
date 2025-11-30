@@ -6,9 +6,11 @@ test("✅TC01: Successful logout after valid login and redirects to login page",
 }) => {
   const homePage = new HomePage(authUser);
 
+  // Ensure home page is loaded
   await homePage.isLoaded();
   await homePage.logout();
 
+  // Assertions
   const logoutMessage = authUser.getByRole("alertdialog", {
     name: "Successful logout!",
   });

@@ -3,6 +3,7 @@ import { NewPostPage } from "../pages/NewPostPage.js";
 
 test("✅TC01: Successful new post creation with image and caption", async ({
   authUser,
+  profilePage,
 }) => {
   const newPost = new NewPostPage(authUser);
 
@@ -20,8 +21,15 @@ test("✅TC01: Successful new post creation with image and caption", async ({
     publicStatus: true,
   });
 
-  // Assert image preview appears (optional UI check)
-  await expect(newPost.postSuccessToast).toBeVisible();
-  await expect(newPost.postSuccessToast).toHaveText("Post created!");
-  await expect(newPost.imagePreview).toBeVisible();
+  // Verify success message
+  await expect(newPost.toastMessage).toBeVisible();
+  await expect(newPost.toastMessage).toHaveText("Post created!");
+
+  // Verify post appears on profile
+  await profilePage.isLoaded();
+  await expect(profilePage.postImage).toBeVisible();
+
+  // Open the last post
+  await profilePage.openLastPost();
+  await expect(profilePage.postTitle).toHaveText("Hello from QA!");
 });

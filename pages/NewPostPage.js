@@ -5,7 +5,7 @@ export class NewPostPage {
     // Page elements
     this.postHeading = this.page.locator("h3");
     this.browseButton = this.page.locator("#choose-file");
-    this.imagePreview = this.page.locator(".image-preview");
+    this.imagePreview = this.page.locator(".post-item");
     this.captionInput = this.page.locator('input[name="caption"]');
 
     // Buttons
@@ -17,14 +17,17 @@ export class NewPostPage {
       .locator('input[type="file"][formcontrolname="coverUrl"]')
       .first();
 
-    this.postSuccessToast = page.locator("div.toast-message");
+    // Success/error message
+    this.toastMessage = page.locator("div.toast-message");
   }
 
+  // Navigate to new post page
   async goto() {
     await this.page.goto("/posts/create");
     await this.page.waitForLoadState("networkidle");
   }
 
+  // Upload image file
   async uploadImage(filePath) {
     // Ensure the hidden input exists
     await this.hiddenFileInput.waitFor({ state: "attached" });
@@ -33,10 +36,12 @@ export class NewPostPage {
     await this.hiddenFileInput.setInputFiles(filePath);
   }
 
+  // Set caption text
   async setCaption(text) {
     await this.captionInput.fill(text);
   }
 
+  // Set post status (public/private)
   async setPostStatus(publicStatus = true) {
     const currentlyChecked = await this.postStatusCheckbox.isChecked();
     if (currentlyChecked !== publicStatus) {
@@ -48,6 +53,7 @@ export class NewPostPage {
     await this.createPostButton.click();
   }
 
+  // Full post creation flow
   async createPostFull({ filePath, caption, publicStatus = true }) {
     await this.uploadImage(filePath);
     if (caption) await this.setCaption(caption);
