@@ -50,13 +50,13 @@ Steps to Reproduce:
 
 Expected Result:
 
-Inline validation or server error appears: “Please upload image”.
+Inline validation or server error appears: "Please upload an image!".
 
 Post is not created.
 
 Actual Result:
 
-Form shows error message; post does not appear in the posts list.
+Form shows error message; The user is still in the new post page form.
 
 #### 🔴 TC03 – New Post Fails: Missing Required Caption
 
@@ -75,10 +75,10 @@ Steps to Reproduce:
 
 Expected Result:
 
-Inline validation or server error appears: “Please upload image”.
+Inline validation or server error appears: “Please enter a caption”.
 
 Post is not created.
 
 Actual Result:
 
-Form shows error message; post does not appear in the posts list.
+Form shows error message; The user is still in the new post page form.

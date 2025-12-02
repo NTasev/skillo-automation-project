@@ -2,31 +2,31 @@ export class ProfilePage {
   constructor(page) {
     this.page = page;
 
-    // Locators for profile elements
-    this.profileName = this.page.locator(".profile-user-settings h2");
-    this.profilePost = this.page.locator("div.gallery-item");
+    // Profile page elements
+    this.profileHeader = this.page.locator("h2");
+    this.posts = this.page.locator("div.gallery-item");
 
-    // Locators for post elements
-    this.postImage = this.page.locator(".post-img img").first();
-    this.postUsername = this.page.locator("a.post-user");
-    this.postTitle = this.page.locator("div.post-title");
+    // Post elements
+    this.postUsername = this.page.locator(".post-user");
+    this.postTitle = this.page.locator(".post-title");
   }
 
-  async goto() {
-    await this.page.goto("/users/");
-    await this.page.waitForLoadState("networkidle");
+  async goto(userId) {
+    await this.page.goto(`/users/${userId}`, { waitUntil: "domcontentloaded" });
+    await this.isLoaded();
   }
 
-  //Loading page profile - using it for login page validation
   async isLoaded() {
-    await this.profileName.waitFor({ state: "visible", timeout: 5000 });
+    await this.profileHeader.waitFor({ state: "visible" });
   }
 
-  async openLastPost() {
-    const lastPost = this.profilePost.first(); // container of the post
-    await lastPost.waitFor();
+  async openRecentPost() {
+    const firstPost = this.posts.first();
 
-    // Click the container instead of the image
-    await lastPost.click();
+    await firstPost.waitFor({ state: "visible" });
+    await firstPost.click();
+
+    // Validate post modal page opened (optional)
+    await this.page.waitForSelector(".post-modal-img", { state: "visible" });
   }
 }

@@ -34,6 +34,6 @@ export default defineConfig({
       use: { ...devices["Desktop Safari"] },
     },
   ],
-  workers: 1, // parallel execution
+  workers: 3, // parallel execution
   forbidOnly: !!process.env.CI, // CI safety
 });

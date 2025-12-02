@@ -46,6 +46,7 @@ test("✅TC01.Positive: Should register with valid user credentials", async ({
 // ---------------------------
 // Negative test cases
 // ---------------------------
+
 test("❌TC02.Negative: Registration fails with weak password", async ({
   registrationPage,
 }) => {

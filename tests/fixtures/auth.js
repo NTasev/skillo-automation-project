@@ -11,7 +11,7 @@ export const test = base.extend({
     await loginPage.login("TasevNikolay", "Password123!");
 
     // Wait for toast to appear
-    await page.waitForSelector("div.toast-message");
+    await page.waitForSelector("#toast-container");
 
     // Pass the logged-in page to the test
     await use(page);

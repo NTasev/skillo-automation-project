@@ -9,16 +9,14 @@ export class NewPostPage {
     this.captionInput = this.page.locator('input[name="caption"]');
 
     // Buttons
-    this.postStatusCheckbox = page.locator("#customSwitch2");
-    this.createPostButton = page.locator("#create-post");
+    this.statusCheckbox = this.page.locator("#customSwitch2");
+    this.createPostButton = this.page.locator("#create-post");
 
     // Correct file input (hidden Angular input)
-    this.hiddenFileInput = page
-      .locator('input[type="file"][formcontrolname="coverUrl"]')
-      .first();
+    this.fileInput = this.page.locator('input[type="file"].file');
 
     // Success/error message
-    this.toastMessage = page.locator("div.toast-message");
+    this.toastMessage = this.page.locator("#toast-container");
   }
 
   // Navigate to new post page
@@ -28,12 +26,8 @@ export class NewPostPage {
   }
 
   // Upload image file
-  async uploadImage(filePath) {
-    // Ensure the hidden input exists
-    await this.hiddenFileInput.waitFor({ state: "attached" });
-
-    // Upload file
-    await this.hiddenFileInput.setInputFiles(filePath);
+  async uploadImage(imagePath) {
+    await this.fileInput.setInputFiles(imagePath);
   }
 
   // Set caption text
@@ -43,21 +37,13 @@ export class NewPostPage {
 
   // Set post status (public/private)
   async setPostStatus(publicStatus = true) {
-    const currentlyChecked = await this.postStatusCheckbox.isChecked();
+    const currentlyChecked = await this.statusCheckbox.isChecked();
     if (currentlyChecked !== publicStatus) {
-      await this.postStatusCheckbox.click();
+      await this.statusCheckbox.click();
     }
   }
 
   async submitPost() {
     await this.createPostButton.click();
-  }
-
-  // Full post creation flow
-  async createPostFull({ filePath, caption, publicStatus = true }) {
-    await this.uploadImage(filePath);
-    if (caption) await this.setCaption(caption);
-    await this.setPostStatus(publicStatus);
-    await this.submitPost();
   }
 }

@@ -10,7 +10,7 @@ It covers core functionalities such as user registration, login, logout, and pos
 The automation suite is designed to:
 
 - Ensure core functionalities work as expected.
-- Validate positive and negative scenarios for registration, login, logout, and post creation.
+- Validate positive and negative test scenarios for registration, login, logout, and post creation.
 - Serve as a professional example of automated testing with Playwright.
 
 ## 🛠️ Technologies Used
@@ -28,14 +28,14 @@ The automation suite is designed to:
 - Node.js >= 18.x
 - NPM >= 9.x
 - Playwright installed (`npm install -D @playwright/test`)
-- Access to the application under test: [http://training.skillo-bg.com:4300/posts/all]
+- Access to the application under test: [http://training.skillo-bg.com:4300]
 
 ## 🚀 Installation & Setup
 
 1. Clone the repository:
-   ```bash
+   `bash
    git clone <https://github.com/NTasev/skillo-automation-project.git>
-   ```
+   ``
    npm install
    npx playwright install
 
@@ -43,7 +43,7 @@ The automation suite is designed to:
 
 npx playwright test
 npx playwright test tests/<fileTestName.spec.js>
-npx playwright test tests/<fileTestName.spec.js> --headed/ --debug/ --project=
+npx playwright test tests/<fileTestName.spec.js> --headed/ --debug/ --project=[chromium/firefox/webkit]
 
 ## 📁 Project Structure
 
@@ -51,12 +51,14 @@ skillo-automation-project/
 │
 ├── pages/ # Page Object Model classes
 ├── tests/ # Test specs
-│ ├── fixtures/ # Custom fixtures
+│ ├── fixtures/
+| | |-base.js
+| | |-auth.js
 │ ├── registration.spec.js
 │ ├── login.spec.js
 │ ├── logout.spec.js
 │ └── newPost.spec.js
-├── test-data/ # Test data (JSON, images)
+├── test-data/ # Test data (loginData.js, registrationData.js, JSON, images)
 ├── .gitignore
 ├── eslint.config.mjs
 ├── package.json
@@ -65,99 +67,103 @@ skillo-automation-project/
 
 ## 🧪 Test Scenarios
 
-### Registration Tests
-
-Registration Tests
+## Registration Tests
 
 🟢 TC01 – Successful Registration
-Verify successful registration with valid and unique data.
-Steps: Navigate → Fill all fields → Sign up → Redirect to homepage.
+Verify user can register with valid and unique data.
+Steps: Navigate → Fill all fields → Sign up → Redirect.
 Expected: Account created, user logged in.
-Actual: User created and logged in successfully.
+Actual: Success; redirected to homepage.
 
 🔴 TC02 – Registration Fails: Weak or Invalid Password
-Verify password rules.
-Steps: Fill password not meeting criteria → Sign up.
+Verify password validation rules.
+Steps: Enter weak password → Sign up.
 Expected: Inline error, registration blocked.
-Actual: Form displays error, no account created.
+Actual: Error displayed.
 
 🔴 TC03 – Registration Fails: Passwords Do Not Match
-Verify password confirmation.
-Steps: Enter different passwords → Sign up.
-Expected: “Passwords do not match” error, registration blocked.
-Actual: Error appears, account not created.
+Verify password confirmation validation.
+Steps: Enter mismatched passwords → Sign up.
+Expected: “Passwords do not match.”
+Actual: Error displayed.
 
 🔴 TC04 – Registration Fails: Missing Username
-Verify required username field.
-Steps: Leave username empty → Fill other fields → Sign up.
-Expected: “This field is required”, registration blocked.
+Verify username is required.
+Steps: Leave username empty → Fill rest → Sign up.
+Expected: Required field validation.
 Actual: Inline validation prevents submission.
 
-### Login Tests
+## Login Tests
 
-🟢 TC01 – Successful Login
-Verify login with valid credentials.
-Steps: Navigate → Enter username/email + password → Sign in.
-Expected: User logged in, redirected to homepage.
-Actual: Login successful, redirected.
+🟢 TC01 – Successful Login (Username)
+Verify login with valid username + password.
+Steps: Navigate → Enter credentials → Sign in.
+Expected: User logged in and redirected.
+Actual: Successful login.
 
-🔴 TC02 – Login Fails: Wrong Password
-Verify login blocked for incorrect password.
-Steps: Enter valid username + wrong password → Sign in.
-Expected: “Wrong username or password”, login blocked.
-Actual: Error displayed, user remains on login page.
+🟢 TC02 – Successful Login (Email)
+Verify login with email + password.
+Steps: Enter email → Sign in.
+Expected: Login successful.
+Actual: Works as expected.
 
-🔴 TC03 – Login Fails: Unregistered User
+🔴 TC03 – Login Fails: Empty Password
+Verify login blocked if password missing.
+Steps: Enter username → Leave password empty → Sign in.
+Expected: Error shown.
+Actual: Login prevented.
+
+🔴 TC04 – Login Fails: Empty Username
+Verify username is required.
+Steps: Leave username empty → Enter password → Sign in.
+Expected: Validation error.
+Actual: Error: “Wrong username or password.”
+
+🔴 TC05 – Login Fails: Unregistered User
 Verify login blocked for unknown user.
 Steps: Enter unregistered username → Sign in.
-Expected: “User does not exist”, login blocked.
-Actual: Error displayed, login prevented.
+Expected: Error shown.
+Actual: Login blocked.
 
-🔴 TC04 – Login Fails: Empty Credentials
-Verify both fields are required.
-Steps: Leave username and password empty → Sign in.
-Expected: “Username and password are required”, login blocked.
-Actual: Inline/server error shown, login prevented.
-
-### Logout Tests
+## Logout Tests
 
 🟢 TC01 – Successful Logout
-Verify logged-in user can logout.
-Steps: Login → Navigate to profile/settings → Click Logout.
-Expected: Redirected to public page, session cleared.
-Actual: User logged out, redirected, menu not visible.
+Verify that a logged-in user can log out.
+Steps: Login → Open menu → Logout.
+Expected: Session cleared, redirected to Login.
+Actual: User logged out.
 
-### New Post Tests
+## New Post Tests
 
-🟢 TC01 – Create New Post with Image Upload
-Verify post creation with image.
-Steps: Navigate → Upload valid image → Enter caption → Create post.
-Expected: Post appears with correct image.
-Actual: Post created and visible.
+🟢 TC01 – Create New Post with Image
+Verify successful post creation with image.
+Steps: Upload image → Add caption → Create post.
+Expected: Post appears in feed/profile.
+Actual: Post created; visible.
 
-🟢 TC02 – Create New Post with Image and Verify in Profile
-Verify image post appears correctly in user profile.
-Steps: Upload image → Enter caption → Create post → Click image in posts list.
-Expected: Image opens correctly, caption matches.
-Actual: Post visible in profile, image opens correctly.
+🔴 TC02 – New Post Fails: Missing Image
+Verify that image is required.
+Steps: Enter caption → Create post.
+Expected: Error: “Please upload an image!”
+Actual: Error shown.
 
-🔴 TC03 – New Post Fails: Missing Required Field
-Verify post creation fails when caption is empty.
-Steps: Leave caption empty → Create post.
-Expected: Inline/server error, post not created.
-Actual: Error shown, post blocked.
+🔴 TC03 – New Post Fails: Missing Caption
+Verify caption is required.
+Steps: Upload image → Leave caption empty → Create post.
+Expected: Inline error.
+Actual: Post not created.
 
 ## 📊 Test Coverage
 
-- Total test cases: 12
-- Positive tests: 5
+- Total test cases: 13
+- Positive tests: 6
 - Negative tests: 7
 
 ## 🏗️ Architecture
 
 All pages use Page Object Model (POM) for maintainability.
 
-Common actions and locators are defined in BasePage.js.
+Common actions and locators are defined in every POM.
 
 Fixtures handle login sessions and reusable setups.
 

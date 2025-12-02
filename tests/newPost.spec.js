@@ -1,35 +1,73 @@
 import { test, expect } from "./fixtures/auth.js";
-import { NewPostPage } from "../pages/NewPostPage.js";
 
-test("✅TC01: Successful new post creation with image and caption", async ({
-  authUser,
+test.beforeEach(async ({ authUser, newPostPage }) => {
+  // Navigate to create post page
+  await newPostPage.goto();
+  console.log(`Navigated to New Post page with ${authUser}`);
+});
+
+test("✅TC01.Positive: New post should pass with image and caption", async ({
   profilePage,
+  newPostPage,
 }) => {
-  const newPost = new NewPostPage(authUser);
-
-  // Go to create post page
-  await newPost.goto();
-
   // Assertions
-  await expect(newPost.postHeading).toBeVisible();
-  await expect(newPost.browseButton).toBeVisible();
+  await expect(newPostPage.postHeading).toBeVisible();
+  await expect(newPostPage.postHeading).toHaveText(
+    "Post a picture to share with your awesome followers"
+  );
 
   // Create a post with image + caption
-  await newPost.createPostFull({
-    filePath: "test-data/test-image.jpg",
-    caption: "Hello from QA!",
-    publicStatus: true,
-  });
+  await newPostPage.uploadImage("test-data/test-image.jpg");
+  await newPostPage.setCaption("Hello from QA!");
+  await newPostPage.setPostStatus(true);
+  await newPostPage.submitPost();
 
   // Verify success message
-  await expect(newPost.toastMessage).toBeVisible();
-  await expect(newPost.toastMessage).toHaveText("Post created!");
+  await expect(newPostPage.toastMessage).toBeVisible();
+  await expect(newPostPage.toastMessage).toHaveText("Post created!");
 
-  // Verify post appears on profile
+  // Verify post appears in profile
   await profilePage.isLoaded();
-  await expect(profilePage.postImage).toBeVisible();
-
-  // Open the last post
-  await profilePage.openLastPost();
+  await profilePage.openRecentPost();
+  await expect(profilePage.postUsername).toBeVisible();
   await expect(profilePage.postTitle).toHaveText("Hello from QA!");
+});
+
+test("❌TC02.Negative: New post should fail with missing required image", async ({
+  newPostPage,
+}) => {
+  // Assertions
+  await expect(newPostPage.postHeading).toBeVisible();
+  await expect(newPostPage.postHeading).toHaveText(
+    "Post a picture to share with your awesome followers"
+  );
+
+  // Create a post without image but with caption
+  await newPostPage.setCaption("This post has no image");
+  await newPostPage.setPostStatus(true);
+  await newPostPage.submitPost();
+
+  // Verify error message
+  await expect(newPostPage.toastMessage).toBeVisible();
+  await expect(newPostPage.toastMessage).toHaveText("Please upload an image!");
+});
+
+test("❌TC03.Negative: New post should fail with missing required caption", async ({
+  newPostPage,
+}) => {
+  // Assertions
+  await expect(newPostPage.postHeading).toBeVisible();
+  await expect(newPostPage.postHeading).toHaveText(
+    "Post a picture to share with your awesome followers"
+  );
+
+  // Create a post with image but without caption
+  await newPostPage.uploadImage("test-data/test-image.jpg");
+  await newPostPage.setCaption("");
+  await newPostPage.setPostStatus(true);
+  await newPostPage.submitPost();
+
+  // Verify error message
+  await expect(newPostPage.toastMessage).toBeVisible();
+  await expect(newPostPage.toastMessage).toHaveText("Please enter caption!");
 });

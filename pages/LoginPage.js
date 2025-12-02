@@ -3,19 +3,22 @@ export class LoginPage {
     this.page = page;
 
     // Page elements
-    this.usernameInput = page.locator("#defaultLoginFormUsername");
-    this.passwordInput = page.locator("#defaultLoginFormPassword");
-    this.signInButton = page.locator("#sign-in-button");
-    this.signInHeader = page.locator("p.h4.mb-4");
-    this.rememberMeCheckbox = page.locator('[formcontrolname="rememberMe"]');
+    this.usernameInput = this.page.locator("#defaultLoginFormUsername");
+    this.passwordInput = this.page.locator("#defaultLoginFormPassword");
+    this.signInButton = this.page.locator("#sign-in-button");
+    this.signInHeader = this.page.locator(".h4.mb-4");
+    this.rememberMeCheckbox = this.page.locator(
+      '[formcontrolname="rememberMe"]'
+    );
 
     // Feedback locators
-    this.toastMessage = page.locator("div.toast-message"); // unified for success/error
+    this.toastMessage = this.page.locator("#toast-container"); // unified for success/error
   }
 
   // Navigate to login page
   async goto() {
     await this.page.goto("/users/login");
+    await this.page.waitForLoadState("domcontentloaded");
   }
 
   // Verify that login page is loaded
@@ -30,24 +33,19 @@ export class LoginPage {
 
   // Set remember me checkbox
   async checkRememberMe(shouldCheck = false) {
-    // Wait for the checkbox to be attached to the DOM and visible
-    await this.rememberMeCheckbox.waitFor({ state: "attached", timeout: 5000 });
-    await this.rememberMeCheckbox.waitFor({ state: "visible", timeout: 5000 });
+    const checkbox = this.rememberMeCheckbox;
 
-    // Get current checked state
-    const isChecked = await this.rememberMeCheckbox.isChecked();
+    // Wait until visible & attached
+    await checkbox.waitFor({ state: "visible", timeout: 5000 });
+    await checkbox.waitFor({ state: "attached", timeout: 5000 });
 
-    //  Toggle if needed
+    const isChecked = await checkbox.isChecked();
     if (isChecked !== shouldCheck) {
-      if (shouldCheck) {
-        await this.rememberMeCheckbox.check();
-      } else {
-        await this.rememberMeCheckbox.uncheck();
-      }
+      // Use click to trigger Angular change events
+      await checkbox.click();
     }
   }
 
-  // Submit the login form if the button is enabled
   async submitIfEnabled() {
     const isEnabled = await this.signInButton.isEnabled();
     if (isEnabled) {
@@ -56,7 +54,7 @@ export class LoginPage {
     } else return false;
   }
 
-  //  Perform login action
+  // Main login flow
   async login(username, password, rememberMe = true) {
     await this.fillUsername(username);
     await this.fillPassword(password);
