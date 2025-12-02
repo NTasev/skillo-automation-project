@@ -11,7 +11,7 @@ test.beforeEach(async ({ registrationPage }) => {
 // Positive test case
 // ---------------------------
 
-test("✅TC01.Positive: Should register with valid user credentials", async ({
+test("✅TC01: Should register with valid user credentials", async ({
   registrationPage,
   homePage,
 }) => {
@@ -33,7 +33,6 @@ test("✅TC01.Positive: Should register with valid user credentials", async ({
   });
 
   // Verify success message
-  await expect(registrationPage.toastContainer).toBeVisible();
   await expect(registrationPage.toastContainer).toHaveText(
     "Successful register!"
   );
@@ -47,7 +46,7 @@ test("✅TC01.Positive: Should register with valid user credentials", async ({
 // Negative test cases
 // ---------------------------
 
-test("❌TC02.Negative: Registration fails with weak password", async ({
+test("❌TC02: Registration should fails with weak password", async ({
   registrationPage,
 }) => {
   // Fill form with invalid data
@@ -59,7 +58,7 @@ test("❌TC02.Negative: Registration fails with weak password", async ({
   await registrationPage.fillPublicInfo(invalidData[0].info);
 
   // Attempt to submit
-  const clicked = await registrationPage.submitIfEnabled();
+  const clicked = await registrationPage.clickIfEnabled();
   await expect(clicked).toBe(false);
 
   // Verify error feedback
@@ -70,7 +69,7 @@ test("❌TC02.Negative: Registration fails with weak password", async ({
   await expect(registrationPage.signUpHeader).toHaveText("Sign up");
 });
 
-test("❌TC03.Negative: Registration fails when passwords do not match", async ({
+test("❌TC03: Registration should fails when passwords do not match", async ({
   registrationPage,
 }) => {
   // Fill form with invalid data
@@ -82,7 +81,7 @@ test("❌TC03.Negative: Registration fails when passwords do not match", async (
   await registrationPage.fillPublicInfo(invalidData[1].info);
 
   // Attempt to submit
-  const clicked = await registrationPage.submitIfEnabled();
+  const clicked = await registrationPage.clickIfEnabled();
   await expect(clicked).toBe(false);
 
   // Verify error feedback
@@ -90,10 +89,11 @@ test("❌TC03.Negative: Registration fails when passwords do not match", async (
   await expect(registrationPage.invalidFeedback).toHaveText(
     invalidData[1].expectedFeedback
   );
+
   await expect(registrationPage.signUpHeader).toHaveText("Sign up");
 });
 
-test("❌TC04.Negative: Registration fails with missing username", async ({
+test("❌TC04: Registration should fails with missing username", async ({
   registrationPage,
 }) => {
   // Fill form with invalid data
@@ -105,7 +105,7 @@ test("❌TC04.Negative: Registration fails with missing username", async ({
   await registrationPage.fillPublicInfo(invalidData[2].info);
 
   // Attempt to submit
-  const clicked = await registrationPage.submitIfEnabled();
+  const clicked = await registrationPage.clickIfEnabled();
   await expect(clicked).toBe(false);
 
   // Verify error feedback

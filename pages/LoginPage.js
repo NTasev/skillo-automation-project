@@ -17,8 +17,8 @@ export class LoginPage {
 
   // Navigate to login page
   async goto() {
-    await this.page.goto("/users/login");
-    await this.page.waitForLoadState("domcontentloaded");
+    // Uses baseURL from config
+    await this.page.goto("/users/login", { waitUntil: "domcontentloaded" });
   }
 
   // Verify that login page is loaded
@@ -31,18 +31,19 @@ export class LoginPage {
     await this.passwordInput.fill(password);
   }
 
-  // Set remember me checkbox
-  async checkRememberMe(shouldCheck = false) {
-    const checkbox = this.rememberMeCheckbox;
+  async submit() {
+    await this.signInButton.click();
+  }
 
-    // Wait until visible & attached
-    await checkbox.waitFor({ state: "visible", timeout: 5000 });
-    await checkbox.waitFor({ state: "attached", timeout: 5000 });
+  async checkRememberMe(shouldCheck = true) {
+    // Wait for checkbox to be visible and enabled
+    await this.rememberMeCheckbox.waitFor({ state: "visible", timeout: 5000 });
 
-    const isChecked = await checkbox.isChecked();
+    // Only change state if it differs from desired
+    const isChecked = await this.rememberMeCheckbox.isChecked();
+
     if (isChecked !== shouldCheck) {
-      // Use click to trigger Angular change events
-      await checkbox.click();
+      await this.rememberMeCheckbox.setChecked(shouldCheck);
     }
   }
 
@@ -58,7 +59,8 @@ export class LoginPage {
   async login(username, password, rememberMe = true) {
     await this.fillUsername(username);
     await this.fillPassword(password);
-    await this.checkRememberMe(rememberMe);
+    await this.checkRememberMe(rememberMe); // default true
+    // Calls the standard click, relying on Playwright to wait if enabled.
     await this.signInButton.click();
   }
 }

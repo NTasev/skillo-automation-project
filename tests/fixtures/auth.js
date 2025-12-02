@@ -2,26 +2,16 @@ import { test as base } from "./base.js";
 import { LoginPage } from "../../pages/LoginPage.js";
 
 export const test = base.extend({
-  // Override page so all tests start logged in
+  // Fixture for logged-in user
   authUser: async ({ page }, use) => {
     const loginPage = new LoginPage(page);
+    await loginPage.goto();
+    await loginPage.login("TasevNikolay", "Password123!", false);
 
-    // Perform login
-    await loginPage.goto(); // make sure you navigate to login page first
-    await loginPage.login("TasevNikolay", "Password123!");
+    // Wait for toast to ensure login completed
+    await loginPage.toastMessage.waitFor({ state: "visible", timeout: 10000 });
 
-    // Wait for toast to appear
-    await page.waitForSelector("#toast-container");
-
-    // Pass the logged-in page to the test
-    await use(page);
-
-    // Cleanup
-    await page.context().clearCookies();
-    await page.evaluate(() => {
-      localStorage.clear();
-      sessionStorage.clear();
-    });
+    await use(page); // pass logged-in page to tests
   },
 });
 

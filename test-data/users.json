@@ -1,25 +1,48 @@
 {
-  "valid": [
-    { "username": "TasevNikolay", "password": "Password123!" },
-    { "username": "user@test.com", "password": "UserPass123!" },
-    { "username": "manager@test.com", "password": "Manager123!" }
+  "validCases": [
+    {
+      "id": "TC01",
+      "credential": "TasevNikolay",
+      "password": "Password123!",
+      "description": "valid username",
+      "expectedUsername": "TasevNikolay"
+    },
+    {
+      "id": "TC02",
+      "credential": "tasev@example.com",
+      "password": "Password123!",
+      "description": "valid email",
+      "expectedUsername": "NikolayTasev"
+    }
   ],
 
-  "invalid": [
+  "emptyCases": [
     {
-      "username": "wronguser@test.com",
-      "password": "wrongpass",
-      "description": "wrong credentials"
-    },
-    {
+      "id": "TC03",
       "username": "",
       "password": "Password123!",
-      "description": "empty username"
+      "description": "empty username field"
     },
     {
-      "username": "admin@test.com",
+      "id": "TC04",
+      "username": "bug_hunter",
       "password": "",
-      "description": "empty password"
+      "description": "empty password field"
+    }
+  ],
+
+  "invalidCases": [
+    {
+      "id": "TC05",
+      "username": "ClickUntilBreak",
+      "password": "click12345",
+      "description": "Wrong email and password"
+    },
+    {
+      "id": "TC06",
+      "username": "404UserNotFound",
+      "password": "404UserNotFound",
+      "description": "wrong username and wrong password"
     }
   ]
 }

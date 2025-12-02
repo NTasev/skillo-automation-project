@@ -6,27 +6,29 @@ export class ProfilePage {
     this.profileHeader = this.page.locator("h2");
     this.posts = this.page.locator("div.gallery-item");
 
-    // Post elements
+    // Post elements (for the opened post)
     this.postUsername = this.page.locator(".post-user");
     this.postTitle = this.page.locator(".post-title");
   }
 
+  // Navigate to a specific user's profile
   async goto(userId) {
-    await this.page.goto(`/users/${userId}`, { waitUntil: "domcontentloaded" });
-    await this.isLoaded();
+    await this.page.goto("/users/", { waitUntil: "domcontentloaded" });
+    await this.isLoaded(); // wait for page elements
   }
 
+  // Pure wait method to ensure profile page is loaded
   async isLoaded() {
     await this.profileHeader.waitFor({ state: "visible" });
   }
 
+  // Open the most recent post (first post in the gallery)
   async openRecentPost() {
     const firstPost = this.posts.first();
-
     await firstPost.waitFor({ state: "visible" });
     await firstPost.click();
-
-    // Validate post modal page opened (optional)
-    await this.page.waitForSelector(".post-modal-img", { state: "visible" });
+    // optional: wait for post details to load
+    await this.postUsername.waitFor({ state: "visible" });
+    await this.postTitle.waitFor({ state: "visible" });
   }
 }

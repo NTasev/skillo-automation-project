@@ -1,115 +1,71 @@
 import { test, expect } from "./fixtures/base.js";
-import {
-  validUsers,
-  emptyFieldUsers,
-  unregisteredUsers,
-} from "../test-data/loginData.js";
+import testData from "../test-data/users.json" assert { type: "json" };
 
+// --- HOOKS: Ensure Test Independence ---
 test.beforeEach(async ({ page, loginPage }) => {
-  // Clear cookies first
+  // 1. Clears any authentication/session state from the previous test run
   await page.context().clearCookies();
 
-  // Navigate to login page
+  // 2. Navigates to a clean starting point using POM
   await loginPage.goto();
+});
 
-  // Prevent Firefox SecurityError
-  await page.waitForLoadState("domcontentloaded");
+// ------------------------------------
+// POSITIVE TEST CASES
+// ------------------------------------
 
-  // Clear localStorage and sessionStorage if needed
-  await page.evaluate(() => {
-    localStorage.clear();
-    sessionStorage.clear();
+test.describe("Positive Login Tests", () => {
+  testData.validCases.forEach((user) => {
+    // Test name uses specific credential type (username/email)
+    test(`✅ ${user.id}: Login should pass with ${user.description}`, async ({
+      loginPage,
+      homePage,
+      profilePage,
+    }) => {
+      // Uses the username from the single object + success message assertion
+      await loginPage.login(user.credential, user.password, true);
+      await expect(loginPage.toastMessage).toContainText("Successful login!");
+
+      // Navigate to profile and assert username
+      await homePage.goToProfile();
+      await expect(profilePage.profileHeader).toHaveText(user.expectedUsername);
+    });
   });
 });
 
-// ----------------------
-// Positive Test Cases
-// ----------------------
+// ------------------------------------
+// NEGATIVE TEST CASES
+// ------------------------------------
 
-test("✅TC01.Positive: Login should pass with valid username and password", async ({
-  loginPage,
-  homePage,
-  profilePage,
-}) => {
-  const user = validUsers[0];
-
-  await loginPage.login(user.username, user.password, true);
-
-  await expect(loginPage.toastMessage).toBeVisible();
-  await expect(loginPage.toastMessage).toContainText("Successful login!");
-
-  await homePage.isLoaded();
-  await homePage.goToProfile();
-
-  await profilePage.isLoaded();
-  await expect(profilePage.profileHeader).toBeVisible();
-  await expect(profilePage.profileHeader).toHaveText(user.username);
-});
-
-test("✅TC02.Positive: Login should pass with valid email and password", async ({
-  loginPage,
-  homePage,
-  profilePage,
-}) => {
-  const user = validUsers[1];
-
-  await loginPage.login(user.email, user.password, true);
-
-  await expect(loginPage.toastMessage).toBeVisible();
-  await expect(loginPage.toastMessage).toContainText("Successful login!");
-
-  await homePage.isLoaded();
-  await homePage.goToProfile();
-
-  await profilePage.isLoaded();
-  await expect(profilePage.profileHeader).toBeVisible();
-  await expect(profilePage.profileHeader).toHaveText(user.username);
-});
-
-// ----------------------
-// Negative Test Cases
-// ----------------------
-
-// Negative: Empty password
-emptyFieldUsers
-  .filter((user) => user.description === "empty password field")
-  .forEach((user) => {
-    test(`❌TC03.Negative: Login should fails with ${user.username}`, async ({
+test.describe("Negative Tests: Empty/Required Fields", () => {
+  testData.emptyCases.forEach((user) => {
+    // Test name uses specific empty credentials
+    test(`❌ ${user.id}: Login should fail with ${user.description}`, async ({
       loginPage,
     }) => {
       await loginPage.fillUsername(user.username);
       await loginPage.fillPassword(user.password);
 
+      // Assert that the submit button cannot be clicked
       const clicked = await loginPage.submitIfEnabled();
       await expect(clicked).toBe(false);
     });
   });
+});
 
-// Negative: Empty username
-emptyFieldUsers
-  .filter((user) => user.description === "empty username field")
-  .forEach((user) => {
-    test(`❌TC04.Negative: Login should fails with ${user.username}`, async ({
+test.describe("Negative Tests: Wrong Credentials", () => {
+  testData.invalidCases.forEach((user) => {
+    // Test name uses specific wrong credentials
+    test(`❌${user.id}: Login should fail with ${user.description}`, async ({
       loginPage,
     }) => {
-      await loginPage.fillUsername(user.username);
-      await loginPage.fillPassword(user.password);
+      await loginPage.login(user.username, user.password, false);
 
-      const clicked = await loginPage.submitIfEnabled();
-      await expect(clicked).toBe(false);
+      // Assertions
+      await expect(loginPage.toastMessage).toBeVisible();
+      await expect(loginPage.toastMessage).toHaveText(
+        "Wrong username or password!"
+      );
     });
-  });
-
-// Negative: Unregistered user
-unregisteredUsers.forEach((user) => {
-  test(`❌TC05.Negative: Login should fails with ${user.username}`, async ({
-    loginPage,
-  }) => {
-    await loginPage.login(user.username, user.password, false);
-
-    await expect(loginPage.toastMessage).toBeVisible();
-    await expect(loginPage.toastMessage).toHaveText(
-      "Wrong username or password!"
-    );
   });
 });

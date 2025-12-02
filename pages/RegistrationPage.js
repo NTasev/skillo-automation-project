@@ -49,12 +49,13 @@ export class RegistrationPage {
     await this.publicInfoInput.fill(info);
   }
 
-  async submitIfEnabled() {
-    const isEnabled = await this.signInButton.isEnabled();
-    if (isEnabled) {
+  async clickIfEnabled() {
+    const enabled = await this.signInButton.isEnabled();
+    if (enabled) {
       await this.signInButton.click();
       return true;
-    } else return false;
+    }
+    return false;
   }
 
   // Perform full registration action
@@ -74,5 +75,6 @@ export class RegistrationPage {
     await this.publicInfoInput.fill(info);
 
     await this.signInButton.click();
+    await this.toastContainer.waitFor({ state: "visible" });
   }
 }

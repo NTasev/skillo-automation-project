@@ -1,25 +1,53 @@
 import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
+  // -----------------------------
+  // Test folder structure
+  // -----------------------------
   testDir: "./tests",
+  outputDir: "test-artifacts", // Centralized storage for videos, traces, screenshots
+
+  // -----------------------------
+  // Parallelization & retries
+  // -----------------------------
+  fullyParallel: true,
+  workers: 3, // Fixed to 3 workers
+  retries: process.env.CI ? 2 : 0, // Retry only in CI for stability
+
+  // -----------------------------
+  // Global timeouts
+  // -----------------------------
   timeout: 30_000,
   expect: {
-    timeout: 5000, // max time for expect assertions
+    timeout: 5_000, // Reduces flaky assertions
   },
-  retries: 1, // retries for failing tests
-  reporter: [
-    ["html", { outputFolder: "playwright-report", open: "never" }],
-    ["list"],
-  ],
+
+  // -----------------------------
+  // Debugging & artifacts
+  // -----------------------------
   use: {
-    baseURL: "http://training.skillo-bg.com:4300", // enables relative navigation
-    headless: false,
-    viewport: { width: 1280, height: 720 },
-    ignoreHTTPSErrors: true,
-    video: "on", // record videos of all tests
-    screenshot: "only-on-failure", // screenshots on failure
-    trace: "retain-on-failure", // collect trace for debugging
+    baseURL: process.env.BASE_URL || "http://training.skillo-bg.com:4300/",
+    trace: "on-first-retry", // Traces only when needed
+    screenshot: "only-on-failure",
+    video: "retain-on-failure",
+    actionTimeout: 10_000,
+    navigationTimeout: 15_000,
+    headless: true, // Recommended for CI stability
+
+    // Use stable Firefox for reliability
+    browserName: "firefox",
   },
+
+  // -----------------------------
+  // Reporting
+  // -----------------------------
+  reporter: process.env.CI
+    ? [["html"], ["github"], ["json", { outputFile: "test-results.json" }]]
+    : [["html", { open: "never" }], ["list"]],
+
+  // -----------------------------
+  // Browser & device coverage
+  // -----------------------------
   projects: [
     {
       name: "chromium",
@@ -27,13 +55,11 @@ export default defineConfig({
     },
     {
       name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
+      use: { ...devices["Desktop Firefox"], firefoxUserPrefs: {} }, // stable prefs
     },
     {
       name: "webkit",
       use: { ...devices["Desktop Safari"] },
     },
   ],
-  workers: 3, // parallel execution
-  forbidOnly: !!process.env.CI, // CI safety
 });

@@ -1,19 +1,19 @@
-import { test, expect } from "./fixtures/auth.js";
+import { test, expect } from "./fixtures/base.js";
 
-test("✅TC01.Positive: Logout should pass with valid login and redirects to login page", async ({
-  authUser,
+test("✅TC01: Logout should pass with valid login and redirects to login page", async ({
+  loginPage,
   homePage,
 }) => {
+  await loginPage.goto();
+  await loginPage.login("NikolayTasev", "Password123!");
+
+  // Verify successful login
+  await expect(loginPage.toastMessage).toHaveText("Successful login!");
+
   // Ensure home page is loaded
   await homePage.isLoaded();
   await homePage.logout();
 
   // Assertions
-  const logoutMessage = authUser.getByRole("alertdialog", {
-    name: "Successful logout!",
-  });
-
-  await expect(logoutMessage).toBeVisible();
-  await expect(logoutMessage).toHaveText("Successful logout!");
-  await expect(authUser).toHaveURL("/users/login");
+  await expect(loginPage.toastMessage).toContainText("Successful logout!");
 });

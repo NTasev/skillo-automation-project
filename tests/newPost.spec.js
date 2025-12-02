@@ -1,73 +1,78 @@
 import { test, expect } from "./fixtures/auth.js";
 
 test.beforeEach(async ({ authUser, newPostPage }) => {
-  // Navigate to create post page
-  await newPostPage.goto();
-  console.log(`Navigated to New Post page with ${authUser}`);
+  // Ensure the authUser fixture is ready
+  await authUser;
+
+  // Navigate to the New Post page with controlled wait
+  await newPostPage.goto({ waitUntil: "domcontentloaded" });
+
+  // Wait for the main post form to be visible
+  await newPostPage.postHeading.waitFor({ state: "visible", timeout: 5000 });
 });
 
-test("✅TC01.Positive: New post should pass with image and caption", async ({
+// ------------------------------------
+// POSITIVE TEST CASES
+// ------------------------------------
+
+test("✅TC01: New post should pass with image and caption", async ({
   profilePage,
   newPostPage,
 }) => {
-  // Assertions
-  await expect(newPostPage.postHeading).toBeVisible();
   await expect(newPostPage.postHeading).toHaveText(
     "Post a picture to share with your awesome followers"
   );
 
-  // Create a post with image + caption
-  await newPostPage.uploadImage("test-data/test-image.jpg");
-  await newPostPage.setCaption("Hello from QA!");
+  // Fill in post details
+  await newPostPage.uploadImage("test-data/the-office-handshake.jpg");
+  await newPostPage.setCaption(
+    "How it feels when I fix a bug no one knew I was responsible for"
+  );
   await newPostPage.setPostStatus(true);
   await newPostPage.submitPost();
 
-  // Verify success message
-  await expect(newPostPage.toastMessage).toBeVisible();
   await expect(newPostPage.toastMessage).toHaveText("Post created!");
 
-  // Verify post appears in profile
+  // Verify post appears in the user profile
   await profilePage.isLoaded();
   await profilePage.openRecentPost();
+
+  // Assertions to verify post details
   await expect(profilePage.postUsername).toBeVisible();
-  await expect(profilePage.postTitle).toHaveText("Hello from QA!");
+  await expect(profilePage.postTitle).toHaveText(
+    "How it feels when I fix a bug no one knew I was responsible for"
+  );
 });
 
-test("❌TC02.Negative: New post should fail with missing required image", async ({
+// ------------------------------------
+// NEGATIVE TEST CASES
+// ------------------------------------
+
+test("❌TC02: New post should fail with missing required image", async ({
   newPostPage,
 }) => {
-  // Assertions
-  await expect(newPostPage.postHeading).toBeVisible();
   await expect(newPostPage.postHeading).toHaveText(
     "Post a picture to share with your awesome followers"
   );
 
-  // Create a post without image but with caption
   await newPostPage.setCaption("This post has no image");
   await newPostPage.setPostStatus(true);
   await newPostPage.submitPost();
 
-  // Verify error message
-  await expect(newPostPage.toastMessage).toBeVisible();
   await expect(newPostPage.toastMessage).toHaveText("Please upload an image!");
 });
 
-test("❌TC03.Negative: New post should fail with missing required caption", async ({
+test("❌TC03: New post should fail with missing required caption", async ({
   newPostPage,
 }) => {
-  // Assertions
-  await expect(newPostPage.postHeading).toBeVisible();
   await expect(newPostPage.postHeading).toHaveText(
     "Post a picture to share with your awesome followers"
   );
 
-  // Create a post with image but without caption
-  await newPostPage.uploadImage("test-data/test-image.jpg");
+  await newPostPage.uploadImage("test-data/the-office-handshake.jpg");
   await newPostPage.setCaption("");
   await newPostPage.setPostStatus(true);
   await newPostPage.submitPost();
 
-  // Verify error message
-  await expect(newPostPage.toastMessage).toBeVisible();
   await expect(newPostPage.toastMessage).toHaveText("Please enter caption!");
 });

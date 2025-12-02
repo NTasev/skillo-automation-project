@@ -171,7 +171,9 @@ Tests are independent and data-driven where applicable.
 
 ## 🐛 Known Issues
 
-(Optional) List any known issues or limitations.
+Common firefox/nighty error behavior that can be flaky or even fail.
+
+Different locators adapted for the projects needs working with Angular framework.
 
 ## 🔮 Future Improvements
 
