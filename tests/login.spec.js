@@ -12,7 +12,6 @@ test.beforeEach(async ({ loginPage }) => {
 
 // The forEach loop dynamically creates individual, independent 'test' cases.
 testData.validCases.forEach((user) => {
-  // Each call to test() creates a separate, runnable, and isolated test.
   test(`✅ ${user.id}: Login should pass with ${user.description}`, async ({
     loginPage,
     homePage,
@@ -34,12 +33,14 @@ testData.validCases.forEach((user) => {
 // NEGATIVE TEST CASES - Empty Data
 // ------------------------------------
 
+// Test name uses specific empty credentials
 testData.emptyCases.forEach((user) => {
-  // Test name uses specific empty credentials
   test(`❌ ${user.id}: Login should fail with ${user.description}`, async ({
     loginPage,
   }) => {
-    await loginPage.login(user.username, user.password, false);
+    // Attempt to login with empty fields
+    await loginPage.fillUsername(user.username);
+    await loginPage.fillPassword(user.password);
 
     // Assert that the submit button cannot be clicked
     const clicked = await loginPage.submitIfEnabled();
@@ -51,8 +52,8 @@ testData.emptyCases.forEach((user) => {
 // NEGATIVE TEST CASES - Invalid Data
 // ------------------------------------
 
+// Test name uses specific wrong credentials
 testData.invalidCases.forEach((user) => {
-  // Test name uses specific wrong credentials
   test(`❌${user.id}: Login should fail with ${user.description}`, async ({
     loginPage,
   }) => {

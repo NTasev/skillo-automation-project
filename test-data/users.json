@@ -37,6 +37,12 @@
       "username": "ClickUntilBreak",
       "password": "click12345",
       "description": "wrong email and password"
+    },
+    {
+      "id": "TC06",
+      "username": "RogueCorgi",
+      "password": "doggosRule!",
+      "description": "wrong username and password"
     }
   ]
 }
