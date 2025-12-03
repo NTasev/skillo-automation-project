@@ -12,9 +12,8 @@ export class ProfilePage {
   }
 
   // Navigate to a specific user's profile
-  async goto(userId) {
-    await this.page.goto("/users/", { waitUntil: "domcontentloaded" });
-    await this.isLoaded(); // wait for page elements
+  async goto() {
+    await this.page.goto("/users/");
   }
 
   // Pure wait method to ensure profile page is loaded

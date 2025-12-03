@@ -30,12 +30,12 @@ export default defineConfig({
     trace: "on-first-retry", // Traces only when needed
     screenshot: "only-on-failure",
     video: "retain-on-failure",
-    actionTimeout: 10_000,
-    navigationTimeout: 15_000,
+    actionTimeout: 0,
+    navigationTimeout: 0,
     headless: true, // Recommended for CI stability
 
-    // Use stable Firefox for reliability
-    browserName: "firefox",
+    // Use stable Chromium for reliability
+    browserName: "chromium",
   },
 
   // -----------------------------

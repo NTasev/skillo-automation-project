@@ -27,7 +27,7 @@ Actual Result:
 
 User is logged in successfully, redirected to homepage.
 
-### 🟢 TC02 – Successful Login with Valid Email and Password
+## 🟢 TC02 – Successful Login with Valid Email and Password
 
 Type: Positive
 Goal: Verify that a registered user can log in successfully using their email address.
@@ -56,7 +56,7 @@ Actual Result:
 
 User is logged in successfully (to be filled after test execution).
 
-#### 🔴 TC03 - Login Fails: Empty Password Field
+## 🔴 TC03 - Login Fails: Empty Password Field
 
 Type: Negative
 Goal: Ensure login is blocked when the password field is empty.
@@ -79,7 +79,7 @@ Actual Result:
 
 User cannot log in and stays on the Login page.
 
-##### 🔴 TC04 – Login Fails: Empty Username Field
+## 🔴 TC04 – Login Fails: Empty Username Field
 
 Type: Negative
 Goal: Validate that login requires both username and password.
@@ -103,7 +103,7 @@ Actual Result:
 Form shows an error banner: “Wrong username or password”.
 User stays on the login page; no request is sent.
 
-###### 🔴 TC05 – Login Fails: Unregistered User
+## 🔴 TC05 – Login Fails: Unregistered User
 
 Type: Negative
 Goal: Ensure login fails if the user does not exist in the system.

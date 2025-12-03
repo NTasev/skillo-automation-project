@@ -35,7 +35,7 @@ Image opens correctly when clicked.
 
 Description of the image match the submitted data.
 
-### 🔴 TC02 – New Post Fails: Missing required image
+## 🔴 TC02 – New Post Fails: Missing required image
 
 Type: Negative
 Goal: Ensure post creation fails if a required upload (e.g. image ) is missing.
@@ -58,7 +58,7 @@ Actual Result:
 
 Form shows error message; The user is still in the new post page form.
 
-#### 🔴 TC03 – New Post Fails: Missing Required Caption
+## 🔴 TC03 – New Post Fails: Missing Required Caption
 
 Type: Negative
 Goal: Ensure post creation fails if a required field (e.g., caption) is missing.

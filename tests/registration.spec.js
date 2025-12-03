@@ -2,11 +2,6 @@ import { test, expect } from "./fixtures/base.js";
 import { generateUsername, generateEmail } from "../utils/helpers.js";
 import { invalidData } from "../test-data/registrationData.js";
 
-test.beforeEach(async ({ registrationPage }) => {
-  // Navigate to the page first
-  await registrationPage.goto();
-});
-
 // ---------------------------
 // Positive test case
 // ---------------------------

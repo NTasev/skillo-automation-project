@@ -18,7 +18,7 @@ export class LoginPage {
   // Navigate to login page
   async goto() {
     // Uses baseURL from config
-    await this.page.goto("/users/login", { waitUntil: "domcontentloaded" });
+    await this.page.goto("/users/login");
   }
 
   // Verify that login page is loaded

@@ -173,15 +173,16 @@ Tests are independent and data-driven where applicable.
 
 Common firefox/nighty error behavior that can be flaky or even fail.
 
-Different locators adapted for the projects needs working with Angular framework.
+Different locators are adapted for the projects needs working
+they work properly with Angular framework.
 
 ## 🔮 Future Improvements
 
 Add full E2E workflow combining registration → login → post → logout.
 
-Add cross-browser screenshots comparison.
-
 Add additional negative scenarios for image upload limits.
+
+Add different project devices in playwright.config.js
 
 ## 👤 Author
 

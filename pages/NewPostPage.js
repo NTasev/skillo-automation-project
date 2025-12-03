@@ -7,7 +7,7 @@ export class NewPostPage {
     this.postHeading = this.page.locator("h3");
     this.browseButton = this.page.locator("#choose-file");
     this.imagePreview = this.page.locator(".post-item");
-    this.captionInput = this.page.locator('input[name="caption"]'); // Buttons
+    this.captionInput = this.page.locator('input[name="caption"]');
 
     this.statusCheckbox = this.page.locator("#customSwitch2");
     this.createPostButton = this.page.locator("#create-post"); // Correct file input (hidden Angular input)
@@ -15,11 +15,11 @@ export class NewPostPage {
     this.fileInput = this.page.locator('input[type="file"].file');
 
     this.toastMessage = this.page.locator("#toast-container");
-  } // Navigate to new post page
+  }
 
+  // Navigate to new post page
   async goto() {
     await this.page.goto("/posts/create");
-    await this.postHeading.waitFor({ state: "visible", timeout: 5000 });
   }
 
   // Upload image file
@@ -36,12 +36,11 @@ export class NewPostPage {
   async setPostStatus(publicStatus = true) {
     const currentlyChecked = await this.statusCheckbox.isChecked();
     if (currentlyChecked !== publicStatus) {
-      await this.statusCheckbox.click();
+      await this.statusCheckbox.check();
     }
   }
 
   async submitPost() {
-    // This fix was retained from the previous step.
-    await this.createPostButton.click({ force: true });
+    await this.createPostButton.click();
   }
 }

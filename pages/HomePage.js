@@ -11,7 +11,6 @@ export class HomePage {
   // Navigate to home page
   async goto() {
     await this.page.goto("/posts/all");
-    await this.isLoaded(); // Wait for main elements to be visible
   }
 
   // Pure wait method to ensure home page is ready
@@ -38,3 +37,4 @@ export class HomePage {
     await this.page.waitForURL("**/users/login");
   }
 }
+

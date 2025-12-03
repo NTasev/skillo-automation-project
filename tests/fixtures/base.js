@@ -1,33 +1,37 @@
 import { test as base } from "@playwright/test";
+import { HomePage } from "../../pages/HomePage";
+import { LoginPage } from "../../pages/LoginPage";
+import { ProfilePage } from "../../pages/ProfilePage";
+import { NewPostPage } from "../../pages/NewPostPage";
+import { RegistrationPage } from "../../pages/RegistrationPage";
 
-import { LoginPage } from "../../pages/LoginPage.js";
-import { HomePage } from "../../pages/HomePage.js";
-import { RegistrationPage } from "../../pages/RegistrationPage.js";
-import { NewPostPage } from "../../pages/NewPostPage.js";
-import { ProfilePage } from "../../pages/ProfilePage.js";
-
-// Extend base test with custom fixtures
 export const test = base.extend({
-  // Page Object fixtures - auto-instantiate page objects
-  loginPage: async ({ page }, use) => {
-    await use(new LoginPage(page));
-  },
-
   homePage: async ({ page }, use) => {
-    await use(new HomePage(page));
+    const homePage = new HomePage(page);
+    await use(homePage);
   },
 
-  registrationPage: async ({ page }, use) => {
-    await use(new RegistrationPage(page));
-  },
-
-  newPostPage: async ({ page }, use) => {
-    await use(new NewPostPage(page));
+  loginPage: async ({ page }, use) => {
+    const loginPage = new LoginPage(page);
+    await loginPage.goto();
+    await use(loginPage);
   },
 
   profilePage: async ({ page }, use) => {
-    await use(new ProfilePage(page));
+    const profilePage = new ProfilePage(page);
+    await use(profilePage);
+  },
+
+  newPostPage: async ({ page }, use) => {
+    const newPostPage = new NewPostPage(page);
+    await use(newPostPage);
+  },
+
+  registrationPage: async ({ page }, use) => {
+    const registrationPage = new RegistrationPage(page);
+    await registrationPage.goto();
+    await use(registrationPage);
   },
 });
 
-export { expect } from "@playwright/test";
+export const expect = base.expect;

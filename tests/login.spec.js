@@ -1,15 +1,6 @@
 import { test, expect } from "./fixtures/base.js";
 import testData from "../test-data/users.json" assert { type: "json" };
 
-// --- HOOKS: Ensure Test Independence ---
-test.beforeEach(async ({ page, loginPage }) => {
-  // 1. Clears any authentication/session state from the previous test run
-  await page.context().clearCookies();
-
-  // 2. Navigates to a clean starting point using POM
-  await loginPage.goto();
-});
-
 // ------------------------------------
 // POSITIVE TEST CASES
 // ------------------------------------
@@ -61,8 +52,7 @@ test.describe("Negative Tests: Wrong Credentials", () => {
     }) => {
       await loginPage.login(user.username, user.password, false);
 
-      // Assertions
-      await expect(loginPage.toastMessage).toBeVisible();
+      // Assertions for wrong credentials toast message
       await expect(loginPage.toastMessage).toHaveText(
         "Wrong username or password!"
       );

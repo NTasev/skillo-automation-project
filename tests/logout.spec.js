@@ -4,7 +4,6 @@ test("✅TC01: Logout should pass with valid login and redirects to login page",
   loginPage,
   homePage,
 }) => {
-  await loginPage.goto();
   await loginPage.login("NikolayTasev", "Password123!");
 
   // Verify successful login

@@ -23,7 +23,7 @@ Actual Result:
 
 User is created successfully. App redirects to homepage.
 
-### 🔴 TC02 – Registration Fails: Weak or Invalid Password
+## 🔴 TC02 – Registration Fails: Weak or Invalid Password
 
 Type: Negative
 Goal: Validate password rules.
@@ -48,7 +48,7 @@ Actual Result:
 
 Form displays error below password field. Registration is prevented and no account is created.
 
-#### 🔴 TC03 – Registration Fails: Passwords Do Not Match
+## 🔴 TC03 – Registration Fails: Passwords Do Not Match
 
 Type: Negative
 Goal: Ensure the system rejects registration when the password and confirmation password do not match.
@@ -77,7 +77,7 @@ Error message appears: “Passwords do not match.”
 
 User remains on registration page; account is not created.
 
-##### 🔴 TC04 – Registration Fails: Missing Username
+## 🔴 TC04 – Registration Fails: Missing Username
 
 Type: Negative
 Goal: Validate that the username field is required.
