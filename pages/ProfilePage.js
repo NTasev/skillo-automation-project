@@ -7,6 +7,7 @@ export class ProfilePage {
     this.posts = this.page.locator("div.gallery-item");
 
     // Post elements (for the opened post)
+    this.postImage = this.page.locator(".post-modal-img");
     this.postUsername = this.page.locator(".post-user");
     this.postTitle = this.page.locator(".post-title");
   }
@@ -26,8 +27,5 @@ export class ProfilePage {
     const firstPost = this.posts.first();
     await firstPost.waitFor({ state: "visible" });
     await firstPost.click();
-    // optional: wait for post details to load
-    await this.postUsername.waitFor({ state: "visible" });
-    await this.postTitle.waitFor({ state: "visible" });
   }
 }

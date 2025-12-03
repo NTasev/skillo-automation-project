@@ -18,9 +18,6 @@ export default defineConfig({
   // Global timeouts
   // -----------------------------
   timeout: 30_000,
-  expect: {
-    timeout: 5_000, // Reduces flaky assertions
-  },
 
   // -----------------------------
   // Debugging & artifacts
@@ -32,7 +29,6 @@ export default defineConfig({
     video: "retain-on-failure",
     actionTimeout: 0,
     navigationTimeout: 0,
-    headless: true, // Recommended for CI stability
 
     // Use stable Chromium for reliability
     browserName: "chromium",

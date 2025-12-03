@@ -1,14 +1,29 @@
-import { test as base } from "./base.js";
+import { test as base, expect } from "./base.js";
 
 export const test = base.extend({
-  // Fixture for logged-in user on a protected page
-  authUser: async ({ loginPage, newPostPage }, use) => {
-    await loginPage.login("TasevNikolay", "Password123!", false);
+  authUser: async ({ page, newPostPage }, use) => {
+    // 1) Open Login page
+    await page.goto("/users/login");
 
-    await loginPage.toastMessage.waitFor({ state: "visible", timeout: 10000 });
+    // 2) Fill in credentials
+    await page.locator("#defaultLoginFormUsername").fill("TasevNikolay");
+    await page.locator("#defaultLoginFormPassword").fill("Password123!");
 
+    // 3) Click Login
+    await page.locator("#sign-in-button").click();
+
+    // 4) Verify successful login toast
+    await expect(page.locator("#toast-container")).toContainText(
+      "Successful login!"
+    );
+
+    // 5) Wait for redirect after login
+    await page.waitForURL("/posts/all");
+
+    // 6) Go to New Post page
     await newPostPage.goto();
 
+    // 7) Provide logged-in NewPostPage to tests
     await use(newPostPage);
   },
 });

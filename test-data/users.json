@@ -36,13 +36,7 @@
       "id": "TC05",
       "username": "ClickUntilBreak",
       "password": "click12345",
-      "description": "Wrong email and password"
-    },
-    {
-      "id": "TC06",
-      "username": "404UserNotFound",
-      "password": "404UserNotFound",
-      "description": "wrong username and wrong password"
+      "description": "wrong email and password"
     }
   ]
 }

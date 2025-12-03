@@ -27,6 +27,7 @@ test("✅TC01: New post should pass with image and caption", async ({
   await profilePage.openRecentPost();
 
   // Assertions to verify post details
+  await expect(profilePage.postImage).toBeVisible();
   await expect(profilePage.postUsername).toBeVisible();
   await expect(profilePage.postTitle).toHaveText(
     "How it feels when I fix a bug no one knew I was responsible for"

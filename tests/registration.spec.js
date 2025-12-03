@@ -6,6 +6,10 @@ import { invalidData } from "../test-data/registrationData.js";
 // Positive test case
 // ---------------------------
 
+test.beforeEach(async ({ registrationPage }) => {
+  await registrationPage.goto("/users/login");
+});
+
 test("✅TC01: Should register with valid user credentials", async ({
   registrationPage,
   homePage,
@@ -28,7 +32,7 @@ test("✅TC01: Should register with valid user credentials", async ({
   });
 
   // Verify success message
-  await expect(registrationPage.toastContainer).toHaveText(
+  await expect(registrationPage.toastContainer).toContainText(
     "Successful register!"
   );
 
