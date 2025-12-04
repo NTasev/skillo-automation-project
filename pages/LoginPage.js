@@ -7,9 +7,7 @@ export class LoginPage {
     this.passwordInput = this.page.locator("#defaultLoginFormPassword");
     this.signInButton = this.page.locator("#sign-in-button");
     this.signInHeader = this.page.locator(".h4.mb-4");
-    this.rememberMeCheckbox = this.page.locator(
-      '[formcontrolname="rememberMe"]'
-    );
+    this.rememberMeCheckbox = this.page.locator('input[type="checkbox"]');
 
     // Feedback locator
     this.toastMessage = this.page.locator("#toast-container");

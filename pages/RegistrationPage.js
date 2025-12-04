@@ -83,6 +83,7 @@ export class RegistrationPage {
     await this.publicInfoInput.fill(info);
 
     await this.signInButton.click();
+
     await this.toastContainer.waitFor({ state: "visible" });
   }
 }

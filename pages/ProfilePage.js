@@ -19,7 +19,7 @@ export class ProfilePage {
   // Pure wait method to ensure profile page is loaded with try-catch for better error handling
   async isLoaded() {
     try {
-      await this.page.waitForURL(/\/users\/\d+/); // regular expression (regex) pattern used to match certain strings—commonly in programming, search, or validation scenarios.
+      await this.page.waitForURL(/\/users\/\d+/); // regular expression pattern used to match certain strings—commonly in programming, search, or validation scenarios.
       await this.profileHeader.waitFor({ state: "visible" });
       console.log("✅ Profile page is loaded");
     } catch (error) {

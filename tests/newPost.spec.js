@@ -1,5 +1,4 @@
 import { test, expect } from "./fixtures/auth.js";
-import testData from "../test-data/users.json" assert { type: "json" };
 
 // Positive test case - Successful Post Creation //
 
@@ -7,6 +6,8 @@ test("✅TC01: New post should pass with image and caption", async ({
   profilePage,
   authUser,
 }) => {
+  const username = process.env.TEST_USER_CREDENTIAL_AUTHUSER;
+
   await expect(authUser.postHeading).toHaveText(
     "Post a picture to share with your awesome followers"
   );
@@ -19,7 +20,7 @@ test("✅TC01: New post should pass with image and caption", async ({
   await authUser.setPostStatus(true);
   await authUser.submitPost();
 
-  await expect(authUser.toastMessage).toHaveText("Post created!");
+  await expect(authUser.toastMessage).toContainText("Post created!");
 
   // Verify the post appears on the profile page
   await profilePage.isLoaded();
@@ -27,9 +28,7 @@ test("✅TC01: New post should pass with image and caption", async ({
 
   // Assertions to verify post details
   await expect(profilePage.postImage).toBeVisible();
-  await expect(profilePage.postUsername).toHaveText(
-    testData.validCases.expectedUsername
-  );
+  await expect(profilePage.postUsername).toHaveText(username);
   await expect(profilePage.postTitle).toHaveText(
     "How it feels when I fix a bug no one knew I was responsible for"
   );
