@@ -2,7 +2,7 @@ export class LoginPage {
   constructor(page) {
     this.page = page;
 
-    // Page elements
+    // Page elements locators
     this.usernameInput = this.page.locator("#defaultLoginFormUsername");
     this.passwordInput = this.page.locator("#defaultLoginFormPassword");
     this.signInButton = this.page.locator("#sign-in-button");
@@ -11,22 +11,18 @@ export class LoginPage {
       '[formcontrolname="rememberMe"]'
     );
 
-    // Feedback locators
-    this.toastMessage = this.page.locator("#toast-container"); // unified for success/error
+    // Feedback locator
+    this.toastMessage = this.page.locator("#toast-container");
   }
 
-  // Navigate to login page
   async goto() {
-    // Uses baseURL from config
     await this.page.goto("/users/login");
   }
 
-  // Verify that login page is loaded
   async fillUsername(username) {
     await this.usernameInput.fill(username);
   }
 
-  // Fill in password
   async fillPassword(password) {
     await this.passwordInput.fill(password);
   }
@@ -35,24 +31,47 @@ export class LoginPage {
     await this.signInButton.click();
   }
 
+  // Handle Remember Me checkbox state based on parameter (checked/unchecked) and using try-catch for better error handling
   async checkRememberMe(shouldCheck = true) {
-    // Wait for checkbox to be visible and enabled
-    await this.rememberMeCheckbox.waitFor({ state: "visible", timeout: 5000 });
+    try {
+      // Wait for checkbox to be visible
+      await this.rememberMeCheckbox.waitFor({
+        state: "visible",
+      });
 
-    // Only change state if it differs from desired
-    const isChecked = await this.rememberMeCheckbox.isChecked();
+      const isChecked = await this.rememberMeCheckbox.isChecked();
 
-    if (isChecked !== shouldCheck) {
-      await this.rememberMeCheckbox.setChecked(shouldCheck);
+      if (isChecked !== shouldCheck) {
+        await this.rememberMeCheckbox.setChecked(shouldCheck);
+        console.log(`✅ Remember Me checkbox is now set to ${shouldCheck}`);
+      } else {
+        console.log(
+          `⚠️ Remember Me checkbox skipping check... already ${shouldCheck}`
+        );
+      }
+    } catch (error) {
+      console.error(`❌ Failed to set Remember Me checkbox:`, error);
+      throw error;
     }
   }
 
+  // Click Sign-in button only if enabled, with logging for better traceability and try-catch for error handling
   async submitIfEnabled() {
-    const isEnabled = await this.signInButton.isEnabled();
-    if (isEnabled) {
-      await this.signInButton.click();
-      return true;
-    } else return false;
+    try {
+      const isEnabled = await this.signInButton.isEnabled();
+
+      if (isEnabled) {
+        await this.signInButton.click();
+        console.log("✅ Sign-in button clicked successfully");
+        return true;
+      }
+
+      console.warn("⚠️ Sign-in button is disabled, skipping click");
+      return false;
+    } catch (error) {
+      console.error("❌ Failed to click Sign-in button:", error);
+      throw error;
+    }
   }
 
   // Main login flow
@@ -60,7 +79,14 @@ export class LoginPage {
     await this.fillUsername(username);
     await this.fillPassword(password);
     await this.checkRememberMe(rememberMe); // default true
-    // Calls the standard click, relying on Playwright to wait if enabled.
     await this.signInButton.click();
+
+    await this.toastMessage.waitFor({ state: "visible" });
+  }
+
+  // Verify that login page is loaded after successful logout.spec.js
+  async isLoaded() {
+    await this.page.waitForURL("**/users/login");
+    await this.signInHeader.waitFor({ state: "visible" });
   }
 }

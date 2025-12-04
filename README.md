@@ -2,16 +2,17 @@
 
 ## 📖 Project Overview
 
-This project is an automated test suite for the Skillo Social Media Platform.  
-It covers core functionalities such as user registration, login, logout, and post creation, using Playwright and the Page Object Model (POM) for maintainable and scalable test automation.
+This is an automated test suite for the Skillo Social Media Platform.
+It covers core functionalities such as user registration, login, logout, and post creation using Playwright and the Page Object Model (POM) for maintainable and scalable test automation.
 
 ## 🎯 Project Purpose
 
 The automation suite is designed to:
 
 - Ensure core functionalities work as expected.
-- Validate positive and negative test scenarios for registration, login, logout, and post creation.
-- Serve as a professional example of automated testing with Playwright.
+- Validate both positive and negative test scenarios.
+- Serve as a professional example of automated testing using Playwright.
+- Demonstrate independent, reusable, and maintainable test design.
 
 ## 🛠️ Technologies Used
 
@@ -32,33 +33,35 @@ The automation suite is designed to:
 
 ## 🚀 Installation & Setup
 
-1. Clone the repository:
-   `bash
-   git clone <https://github.com/NTasev/skillo-automation-project.git>
-   ``
-   npm install
-   npx playwright install
+git clone [https://github.com/NTasev/skillo-automation-project.git]
+cd skillo-automation-project
+npm install
+npx playwright install
 
 ## ▶️ Running Tests
 
 npx playwright test
-npx playwright test tests/<fileTestName.spec.js>
-npx playwright test tests/<fileTestName.spec.js> --headed/ --debug/ --project=[chromium/firefox/webkit]
+
+npx playwright test tests/[fileTestName].spec.js
+
+npx playwright test tests/[fileTestName].spec.js --headed
+npx playwright test tests/[fileTestName].spec.js --debug
+npx playwright test tests/[fileTestName].spec.js --project=chromium
 
 ## 📁 Project Structure
 
 skillo-automation-project/
 │
-├── pages/ # Page Object Model classes
+├── pages/ # Page Object Model (POM) classes
 ├── tests/ # Test specs
 │ ├── fixtures/
-| | |-base.js
-| | |-auth.js
+│ │ ├── base.js
+│ │ └── auth.js
 │ ├── registration.spec.js
 │ ├── login.spec.js
 │ ├── logout.spec.js
 │ └── newPost.spec.js
-├── test-data/ # Test data (loginData.js, registrationData.js, JSON, images)
+├── test-data/ # Test data (registrationData.js, JSON, images)
 ├── .gitignore
 ├── eslint.config.mjs
 ├── package.json
@@ -67,91 +70,27 @@ skillo-automation-project/
 
 ## 🧪 Test Scenarios
 
-## Registration Tests
-
-🟢 TC01 – Successful Registration
-Verify user can register with valid and unique data.
-Steps: Navigate → Fill all fields → Sign up → Redirect.
-Expected: Account created, user logged in.
-Actual: Success; redirected to homepage.
-
-🔴 TC02 – Registration Fails: Weak or Invalid Password
-Verify password validation rules.
-Steps: Enter weak password → Sign up.
-Expected: Inline error, registration blocked.
-Actual: Error displayed.
-
-🔴 TC03 – Registration Fails: Passwords Do Not Match
-Verify password confirmation validation.
-Steps: Enter mismatched passwords → Sign up.
-Expected: “Passwords do not match.”
-Actual: Error displayed.
-
-🔴 TC04 – Registration Fails: Missing Username
-Verify username is required.
-Steps: Leave username empty → Fill rest → Sign up.
-Expected: Required field validation.
-Actual: Inline validation prevents submission.
-
-## Login Tests
-
-🟢 TC01 – Successful Login (Username)
-Verify login with valid username + password.
-Steps: Navigate → Enter credentials → Sign in.
-Expected: User logged in and redirected.
-Actual: Successful login.
-
-🟢 TC02 – Successful Login (Email)
-Verify login with email + password.
-Steps: Enter email → Sign in.
-Expected: Login successful.
-Actual: Works as expected.
-
-🔴 TC03 – Login Fails: Empty Password
-Verify login blocked if password missing.
-Steps: Enter username → Leave password empty → Sign in.
-Expected: Error shown.
-Actual: Login prevented.
-
-🔴 TC04 – Login Fails: Empty Username
-Verify username is required.
-Steps: Leave username empty → Enter password → Sign in.
-Expected: Validation error.
-Actual: Error: “Wrong username or password.”
-
-🔴 TC05 – Login Fails: Unregistered User
-Verify login blocked for unknown user.
-Steps: Enter unregistered username → Sign in.
-Expected: Error shown.
-Actual: Login blocked.
-
-## Logout Tests
-
-🟢 TC01 – Successful Logout
-Verify that a logged-in user can log out.
-Steps: Login → Open menu → Logout.
-Expected: Session cleared, redirected to Login.
-Actual: User logged out.
-
-## New Post Tests
-
-🟢 TC01 – Create New Post with Image
-Verify successful post creation with image.
-Steps: Upload image → Add caption → Create post.
-Expected: Post appears in feed/profile.
-Actual: Post created; visible.
-
-🔴 TC02 – New Post Fails: Missing Image
-Verify that image is required.
-Steps: Enter caption → Create post.
-Expected: Error: “Please upload an image!”
-Actual: Error shown.
-
-🔴 TC03 – New Post Fails: Missing Caption
-Verify caption is required.
-Steps: Upload image → Leave caption empty → Create post.
-Expected: Inline error.
-Actual: Post not created.
+| TC      | Description                | Steps                                            | Expected                               | Actual                       |
+| ------- | -------------------------- | ------------------------------------------------ | -------------------------------------- | ---------------------------- |
+| ✅ TC01 | Login with Username        | Navigate → Enter credentials → Sign in           | User logged in, redirected             | Works as expected            |
+| ✅ TC02 | Login with Email           | Enter email → Sign in                            | User logged in, redirected             | Works as expected            |
+| 🔴 TC03 | Empty Password             | Enter username → Leave password empty → Sign in  | Error shown                            | Login prevented              |
+| 🔴 TC04 | Empty Username             | Leave username empty → Enter password → Sign in  | Validation error                       | "Wrong username or password" |
+|         |                            |                                                  |                                        |                              |
+| ------- | -------------------        | -----------------------------------------------  | --------------------------             | ---------------------------- |
+| ✅ TC01 | Login with Username        | Navigate → Enter credentials → Sign in           | User logged in, redirected             | Works as expected            |
+| ✅ TC02 | Login with Email           | Enter email → Sign in                            | User logged in, redirected             | Works as expected            |
+| 🔴 TC03 | Empty Password             | Enter username → Leave password empty → Sign in  | Error shown                            | Login prevented              |
+| 🔴 TC04 | Empty Username             | Leave username empty → Enter password → Sign in  | Validation error                       | "Wrong username or password" |
+| 🔴 TC05 | Unregistered User          | Enter unregistered username → Sign in            | Error shown                            | Login blocked                |
+|         |                            |                                                  |                                        |                              |
+| ------  | -----------------          | --------------------------                       | ------------------------------------   | -----------------            |
+| ✅ TC01 | Successful Logout          | Login → Open menu → Logout                       | Session cleared; redirected to login   | Works as expected            |
+|         |                            |                                                  |                                        |                              |
+| ------- | -------------------------- | ------------------------------------------------ | -------------------------------------- | ---------------------        |
+| ✅ TC01 | Create New Post with Image | Upload image → Add caption → Create post         | Post appears in feed/profile           | Post created; visible        |
+| 🔴 TC02 | Missing Image              | Enter caption → Create post                      | Error shown: "Please upload an image!" | Error displayed              |
+| 🔴 TC03 | Missing Caption            | Upload image → Leave caption empty → Create post | Inline error; post blocked             | Error displayed              |
 
 ## 📊 Test Coverage
 
@@ -161,28 +100,26 @@ Actual: Post not created.
 
 ## 🏗️ Architecture
 
-All pages use Page Object Model (POM) for maintainability.
-
-Common actions and locators are defined in every POM.
-
-Fixtures handle login sessions and reusable setups.
-
-Tests are independent and data-driven where applicable.
+- Page Object Model (POM) for maintainability.
+- Common actions and locators defined in every POM class.
+- Fixtures handle reusable setups and login sessions.
+- Tests are independent and data-driven where applicable.
 
 ## 🐛 Known Issues
 
-Common firefox/nighty error behavior that can be flaky or even fail.
+Some tests may fail intermittently on Firefox due to locator inconsistencies.
 
-Different locators are adapted for the projects needs working
-they work properly with Angular framework.
+All locators are adapted for Angular framework but may require updates in future versions.
 
 ## 🔮 Future Improvements
 
-Add full E2E workflow combining registration → login → post → logout.
+Implement full E2E workflow: registration → login → post → logout.
 
-Add additional negative scenarios for image upload limits.
+Add negative tests for image upload limits (size, format).
 
-Add different project devices in playwright.config.js
+Expand cross-browser/device testing in playwright.config.js.
+
+Include API test coverage for key endpoints.
 
 ## 👤 Author
 
@@ -191,4 +128,4 @@ Nikolay Emilov Tasev
 
 ## 📄 License
 
-(Optional) MIT License or mention it's for educational purposes
+This project is for educational purposes only.

@@ -1,22 +1,25 @@
 import { test, expect } from "./fixtures/base.js";
 
-test("✅TC01: Logout should pass with valid login and redirects to login page", async ({
+// Positive test case - Logout with valid login //
+
+test("✅TC01: Logout should redirects logged-in user to login page", async ({
   loginPage,
   homePage,
 }) => {
   await loginPage.goto();
 
-  await loginPage.login("NikolayTasev", "Password123!");
-
-  // Verify successful login
+  // Login with valid credentials (hardcoded in .env file)
+  await loginPage.login(
+    process.env.TEST_USER_CREDENTIAL_LOGOUT,
+    process.env.TEST_USER_CREDENTIAL_LOGOUT_PASSWORD
+  );
   await expect(loginPage.toastMessage).toHaveText("Successful login!");
 
-  // Ensure home page is loaded
+  // Verify home page is loaded
   await homePage.isLoaded();
-
-  // Perform logout
   await homePage.logout();
 
-  // Assertions
+  // Verify redirection to login page after logout
+  await loginPage.isLoaded();
   await expect(loginPage.toastMessage).toContainText("Successful logout!");
 });

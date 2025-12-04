@@ -2,26 +2,23 @@ import { test, expect } from "./fixtures/base.js";
 import { generateUsername, generateEmail } from "../utils/helpers.js";
 import { invalidData } from "../test-data/registrationData.js";
 
-// ---------------------------
-// Positive test case
-// ---------------------------
+// Positive test case - Successful Registration //
 
 test.beforeEach(async ({ registrationPage }) => {
-  await registrationPage.goto("/users/login");
+  await registrationPage.goto("/users/register");
 });
 
 test("✅TC01: Should register with valid user credentials", async ({
   registrationPage,
   homePage,
 }) => {
-  // Generate random valid data
+  // Generate random valid data for registration
   const randomUsername = generateUsername();
   const randomEmail = generateEmail();
 
-  // Assertions
   await expect(registrationPage.signUpHeader).toHaveText("Sign up");
 
-  // Fill registration form and submit
+  // Fill registration form and submit after successful validation from POM
   await registrationPage.registration({
     username: randomUsername,
     email: randomEmail,
@@ -31,24 +28,21 @@ test("✅TC01: Should register with valid user credentials", async ({
     info: "Automation QA Test",
   });
 
-  // Verify success message
   await expect(registrationPage.toastContainer).toContainText(
     "Successful register!"
   );
 
-  // Verify redirection to home page
+  // Verify redirection to home page after successful registration
   await homePage.isLoaded();
   await expect(homePage.linkProfile).toBeVisible();
 });
 
-// ---------------------------
-// Negative test cases
-// ---------------------------
+// Negative test cases - invalid data //
 
 test("❌TC02: Registration should fails with weak password", async ({
   registrationPage,
 }) => {
-  // Fill form with invalid data
+  // Fill form with invalid data from registrationData.js using first set
   await registrationPage.fillUsername(invalidData[0].username);
   await registrationPage.fillEmail(invalidData[0].email);
   await registrationPage.fillBirthDate(invalidData[0].date);
@@ -56,22 +50,23 @@ test("❌TC02: Registration should fails with weak password", async ({
   await registrationPage.fillConfirmPassword(invalidData[0].confirmPassword);
   await registrationPage.fillPublicInfo(invalidData[0].info);
 
-  // Attempt to submit
+  // Attempt to submit and verify after successful validation from POM
   const clicked = await registrationPage.clickIfEnabled();
   await expect(clicked).toBe(false);
 
-  // Verify error feedback
+  // Verify error feedback while taking it from registrationData.js
   await expect(registrationPage.invalidFeedback).toBeVisible();
   await expect(registrationPage.invalidFeedback).toHaveText(
     invalidData[0].expectedFeedback
   );
+
   await expect(registrationPage.signUpHeader).toHaveText("Sign up");
 });
 
 test("❌TC03: Registration should fails when passwords do not match", async ({
   registrationPage,
 }) => {
-  // Fill form with invalid data
+  // Fill form with invalid data from registrationData.js using second set
   await registrationPage.fillUsername(invalidData[1].username);
   await registrationPage.fillEmail(invalidData[1].email);
   await registrationPage.fillBirthDate(invalidData[1].date);
@@ -79,11 +74,11 @@ test("❌TC03: Registration should fails when passwords do not match", async ({
   await registrationPage.fillConfirmPassword(invalidData[1].confirmPassword);
   await registrationPage.fillPublicInfo(invalidData[1].info);
 
-  // Attempt to submit
+  // Attempt to submit and verify after successful validation from POM
   const clicked = await registrationPage.clickIfEnabled();
   await expect(clicked).toBe(false);
 
-  // Verify error feedback
+  // Verify error feedback while taking it from registrationData.js
   await expect(registrationPage.invalidFeedback).toBeVisible();
   await expect(registrationPage.invalidFeedback).toHaveText(
     invalidData[1].expectedFeedback
@@ -95,7 +90,7 @@ test("❌TC03: Registration should fails when passwords do not match", async ({
 test("❌TC04: Registration should fails with missing username", async ({
   registrationPage,
 }) => {
-  // Fill form with invalid data
+  // Fill form with invalid data from registrationData.js using third set
   await registrationPage.fillUsername(invalidData[2].username);
   await registrationPage.fillEmail(invalidData[2].email);
   await registrationPage.fillBirthDate(invalidData[2].date);
@@ -103,14 +98,23 @@ test("❌TC04: Registration should fails with missing username", async ({
   await registrationPage.fillConfirmPassword(invalidData[2].confirmPassword);
   await registrationPage.fillPublicInfo(invalidData[2].info);
 
-  // Attempt to submit
+  // Attempt to submit and verify after successful validation from POM
   const clicked = await registrationPage.clickIfEnabled();
   await expect(clicked).toBe(false);
 
-  // Verify error feedback
+  // Verify error feedback while taking it from registrationData.js
   await expect(registrationPage.invalidFeedback).toBeVisible();
   await expect(registrationPage.invalidFeedback).toHaveText(
     invalidData[2].expectedFeedback
   );
+
   await expect(registrationPage.signUpHeader).toHaveText("Sign up");
+});
+
+// Clear cookies and storage after each test to maintain isolation //
+test.afterEach(async ({ page }) => {
+  const context = page.context();
+  await context.clearCookies();
+  await page.evaluate(() => localStorage.clear());
+  await page.evaluate(() => sessionStorage.clear());
 });

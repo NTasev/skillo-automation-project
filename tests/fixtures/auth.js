@@ -1,29 +1,31 @@
 import { test as base, expect } from "./base.js";
 
+// Authenticated user fixture
+
+// Logs in a user before running tests that require authentication and provides the newPostPage for test use.
 export const test = base.extend({
   authUser: async ({ page, newPostPage }, use) => {
-    // 1) Open Login page
     await page.goto("/users/login");
 
-    // 2) Fill in credentials
-    await page.locator("#defaultLoginFormUsername").fill("TasevNikolay");
-    await page.locator("#defaultLoginFormPassword").fill("Password123!");
+    await page
+      .locator("#defaultLoginFormUsername")
+      .fill(process.env.TEST_USER_CREDENTIAL_AUTHUSER); // username from .env
+    await page
+      .locator("#defaultLoginFormPassword")
+      .fill(process.env.TEST_USER_PASSWORD_AUTHUSER); // password from .env
 
-    // 3) Click Login
     await page.locator("#sign-in-button").click();
 
-    // 4) Verify successful login toast
     await expect(page.locator("#toast-container")).toContainText(
       "Successful login!"
     );
 
-    // 5) Wait for redirect after login
     await page.waitForURL("/posts/all");
 
-    // 6) Go to New Post page
+    // Navigate to new post page for tests that require it
     await newPostPage.goto();
 
-    // 7) Provide logged-in NewPostPage to tests
+    // Provide the newPostPage to the tests
     await use(newPostPage);
   },
 });

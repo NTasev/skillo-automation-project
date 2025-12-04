@@ -5,6 +5,7 @@ import { ProfilePage } from "../../pages/ProfilePage";
 import { NewPostPage } from "../../pages/NewPostPage";
 import { RegistrationPage } from "../../pages/RegistrationPage";
 
+// Extend the base test to include page objects for easier access in tests
 export const test = base.extend({
   homePage: async ({ page }, use) => {
     const homePage = new HomePage(page);

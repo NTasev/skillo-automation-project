@@ -2,15 +2,15 @@
   "validCases": [
     {
       "id": "TC01",
-      "credential": "TasevNikolay",
-      "password": "Password123!",
+      "credentialKey": "USER_CREDENTIAL_LOGIN_1",
+      "passwordKey": "USER_PASSWORD_LOGIN_1",
       "description": "valid username",
       "expectedUsername": "TasevNikolay"
     },
     {
       "id": "TC02",
-      "credential": "tasev@example.com",
-      "password": "Password123!",
+      "credentialKey": "USER_CREDENTIAL_LOGIN_2",
+      "passwordKey": "USER_PASSWORD_LOGIN_2",
       "description": "valid email",
       "expectedUsername": "NikolayTasev"
     }
@@ -31,7 +31,7 @@
     }
   ],
 
-  "invalidCases": [
+  "unregisteredCases": [
     {
       "id": "TC05",
       "username": "ClickUntilBreak",

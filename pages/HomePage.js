@@ -2,7 +2,7 @@ export class HomePage {
   constructor(page) {
     this.page = page;
 
-    // Page elements
+    // Page elements locators
     this.linkProfile = this.page.locator("#nav-link-profile");
     this.linkNewPost = this.page.locator("#nav-link-new-post");
     this.logoutButton = this.page.locator("a:has(i.fas.fa-sign-out-alt)");
@@ -13,10 +13,16 @@ export class HomePage {
     await this.page.goto("/posts/all");
   }
 
-  // Pure wait method to ensure home page is ready
+  // Verify that home page is loaded with essential elements using try-catch for better error handling
   async isLoaded() {
-    await this.linkProfile.waitFor({ state: "visible" });
-    await this.linkNewPost.waitFor({ state: "visible" });
+    try {
+      await this.linkProfile.waitFor({ state: "visible" });
+      await this.linkNewPost.waitFor({ state: "visible" });
+      console.log("✅ Home page is loaded");
+    } catch (error) {
+      console.error("❌ Home page did not load correctly:", error);
+      throw error;
+    }
   }
 
   // Navigate to profile page
@@ -31,10 +37,8 @@ export class HomePage {
     await this.page.waitForURL("**/posts/create");
   }
 
-  // Logout user
+  // Logout the valid user from logout.spec.js
   async logout() {
     await this.logoutButton.click();
-    await this.page.waitForURL("**/users/login");
   }
 }
-

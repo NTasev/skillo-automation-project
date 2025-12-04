@@ -1,29 +1,24 @@
+import dotenv from "dotenv";
+dotenv.config({ quiet: true });
+
 import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
-  // -----------------------------
-  // Test folder structure
-  // -----------------------------
+  // Test files & artifacts
   testDir: "./tests",
   outputDir: "test-artifacts", // Centralized storage for videos, traces, screenshots
 
-  // -----------------------------
-  // Parallelization & retries
-  // -----------------------------
+  // Parallelization & retries // -----------------------------
   fullyParallel: true,
   workers: 3, // Fixed to 3 workers
-  retries: process.env.CI ? 2 : 0, // Retry only in CI for stability
+  retries: 1, // Max retries set to 1
 
-  // -----------------------------
   // Global timeouts
-  // -----------------------------
   timeout: 30_000,
 
-  // -----------------------------
   // Debugging & artifacts
-  // -----------------------------
   use: {
-    baseURL: process.env.BASE_URL || "http://training.skillo-bg.com:4300/",
+    baseURL: process.env.BASE_URL,
     trace: "on-first-retry", // Traces only when needed
     screenshot: "only-on-failure",
     video: "retain-on-failure",
@@ -34,16 +29,12 @@ export default defineConfig({
     browserName: "chromium",
   },
 
-  // -----------------------------
   // Reporting
-  // -----------------------------
   reporter: process.env.CI
     ? [["html"], ["github"], ["json", { outputFile: "test-results.json" }]]
     : [["html", { open: "never" }], ["list"]],
 
-  // -----------------------------
   // Browser & device coverage
-  // -----------------------------
   projects: [
     {
       name: "chromium",

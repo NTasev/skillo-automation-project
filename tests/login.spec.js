@@ -1,14 +1,11 @@
 import { test, expect } from "./fixtures/base.js";
 import testData from "../test-data/users.json" assert { type: "json" };
 
-// This test.beforeEach hook will run before every single 'test' in this file,
 test.beforeEach(async ({ loginPage }) => {
   await loginPage.goto("/users/login");
 });
 
-// ------------------------------------
-// POSITIVE TEST CASES
-// ------------------------------------
+// Positive test cases - Successful Logins
 
 // The forEach loop dynamically creates individual, independent 'test' cases.
 testData.validCases.forEach((user) => {
@@ -17,10 +14,13 @@ testData.validCases.forEach((user) => {
     homePage,
     profilePage,
   }) => {
-    // Uses the username from the single object + success message assertion
-    await loginPage.login(user.credential, user.password, true);
+    const username = process.env[user.credentialKey];
+    const password = process.env[user.passwordKey];
 
-    // Assert successful login toast message
+    await expect(loginPage.signInHeader).toHaveText("Sign in");
+
+    // Uses the username from the single object + success message assertion
+    await loginPage.login(username, password, true);
     await expect(loginPage.toastMessage).toContainText("Successful login!");
 
     // Navigate to profile and assert username
@@ -29,15 +29,15 @@ testData.validCases.forEach((user) => {
   });
 });
 
-// ------------------------------------
-// NEGATIVE TEST CASES - Empty Data
-// ------------------------------------
+// Negative tests cases - Empty Data
 
-// Test name uses specific empty credentials
+// Test name uses specific empty credentials from users.json
 testData.emptyCases.forEach((user) => {
   test(`❌ ${user.id}: Login should fail with ${user.description}`, async ({
     loginPage,
   }) => {
+    await expect(loginPage.signInHeader).toHaveText("Sign in");
+
     // Attempt to login with empty fields
     await loginPage.fillUsername(user.username);
     await loginPage.fillPassword(user.password);
@@ -48,15 +48,14 @@ testData.emptyCases.forEach((user) => {
   });
 });
 
-// ------------------------------------
-// NEGATIVE TEST CASES - Invalid Data
-// ------------------------------------
+// Negative test cases - Unregistered Data
 
-// Test name uses specific wrong credentials
-testData.invalidCases.forEach((user) => {
+testData.unregisteredCases.forEach((user) => {
   test(`❌${user.id}: Login should fail with ${user.description}`, async ({
     loginPage,
   }) => {
+    await expect(loginPage.signInHeader).toHaveText("Sign in");
+
     await loginPage.login(user.username, user.password, false);
 
     // Assertions for wrong credentials toast message
@@ -64,4 +63,12 @@ testData.invalidCases.forEach((user) => {
       "Wrong username or password!"
     );
   });
+});
+
+// Clear cookies and storage after each test to maintain isolation for remember me checkbox //
+test.afterEach(async ({ page }) => {
+  const context = page.context();
+  await context.clearCookies();
+  await page.evaluate(() => localStorage.clear());
+  await page.evaluate(() => sessionStorage.clear());
 });

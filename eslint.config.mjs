@@ -6,13 +6,11 @@ import playwright from "eslint-plugin-playwright";
 export default defineConfig([
   {
     files: ["**/*.{js,mjs,cjs}"],
-    plugins: {
-      js,
-    },
-    extends: ["js/recommended"],
+    extends: [js.configs.recommended],
     languageOptions: {
-      // ✅ Fix for Modern Syntax Errors (Parsing error: Unexpected token assert)
+      parser: "@babel/eslint-parser",
       parserOptions: {
+        requireConfigFile: false,
         ecmaVersion: 2022,
         sourceType: "module",
       },
@@ -28,7 +26,16 @@ export default defineConfig([
     plugins: {
       playwright,
     },
-    extends: [playwright.configs["recommended"]],
-    rules: {},
+    languageOptions: {
+      parser: "@babel/eslint-parser",
+      parserOptions: {
+        requireConfigFile: false,
+        ecmaVersion: 2022,
+        sourceType: "module",
+      },
+    },
+    rules: {
+      ...playwright.configs.recommended.rules,
+    },
   },
 ]);

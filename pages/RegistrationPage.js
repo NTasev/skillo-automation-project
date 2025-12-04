@@ -2,7 +2,7 @@ export class RegistrationPage {
   constructor(page) {
     this.page = page;
 
-    // Registration form locators
+    // Page locators
     this.usernameInput = this.page.locator("input[name='username']");
     this.emailInput = this.page.locator("input[type='email']");
     this.birthDateInput = this.page.locator("input[type='date']");
@@ -19,12 +19,10 @@ export class RegistrationPage {
     this.invalidFeedback = this.page.locator(".invalid-feedback");
   }
 
-  // Navigate to registration page
   async goto() {
     await this.page.goto("/users/register");
   }
 
-  // Form actions
   async fillUsername(username) {
     await this.usernameInput.fill(username);
   }
@@ -49,13 +47,23 @@ export class RegistrationPage {
     await this.publicInfoInput.fill(info);
   }
 
+  // Click the sign-up button if enabled with better traceability and error handling
   async clickIfEnabled() {
-    const enabled = await this.signInButton.isEnabled();
-    if (enabled) {
-      await this.signInButton.click();
-      return true;
+    try {
+      const enabled = await this.signInButton.isEnabled();
+
+      if (enabled) {
+        await this.signInButton.click();
+        console.log("✅ Sign-up button clicked successfully.");
+        return true;
+      }
+
+      console.warn("⚠️ Sign-up button is disabled, skipping click.");
+      return false;
+    } catch (error) {
+      console.error("❌ Failed to click the sign-up button:", error);
+      throw error; // re-throw so the test still fails
     }
-    return false;
   }
 
   // Perform full registration action

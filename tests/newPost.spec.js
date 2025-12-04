@@ -1,8 +1,7 @@
 import { test, expect } from "./fixtures/auth.js";
+import testData from "../test-data/users.json" assert { type: "json" };
 
-// ------------------------------------
-// POSITIVE TEST CASES
-// ------------------------------------
+// Positive test case - Successful Post Creation //
 
 test("✅TC01: New post should pass with image and caption", async ({
   profilePage,
@@ -12,7 +11,7 @@ test("✅TC01: New post should pass with image and caption", async ({
     "Post a picture to share with your awesome followers"
   );
 
-  // Fill in post details
+  // Fill in post details and submit
   await authUser.uploadImage("test-data/the-office-handshake.jpg");
   await authUser.setCaption(
     "How it feels when I fix a bug no one knew I was responsible for"
@@ -22,21 +21,21 @@ test("✅TC01: New post should pass with image and caption", async ({
 
   await expect(authUser.toastMessage).toHaveText("Post created!");
 
-  // Verify post appears in the user profile
+  // Verify the post appears on the profile page
   await profilePage.isLoaded();
   await profilePage.openRecentPost();
 
   // Assertions to verify post details
   await expect(profilePage.postImage).toBeVisible();
-  await expect(profilePage.postUsername).toBeVisible();
+  await expect(profilePage.postUsername).toHaveText(
+    testData.validCases.expectedUsername
+  );
   await expect(profilePage.postTitle).toHaveText(
     "How it feels when I fix a bug no one knew I was responsible for"
   );
 });
 
-// ------------------------------------
-// NEGATIVE TEST CASES
-// ------------------------------------
+// Negative test cases - Missing Required Fields //
 
 test("❌TC02: New post should fail with missing required image", async ({
   authUser,
@@ -45,10 +44,12 @@ test("❌TC02: New post should fail with missing required image", async ({
     "Post a picture to share with your awesome followers"
   );
 
+  // Fill in post details without image and submit
   await authUser.setCaption("This post has no image");
   await authUser.setPostStatus(true);
   await authUser.submitPost();
 
+  await authUser.waitForToastMessage();
   await expect(authUser.toastMessage).toHaveText("Please upload an image!");
 });
 
@@ -59,10 +60,12 @@ test("❌TC03: New post should fail with missing required caption", async ({
     "Post a picture to share with your awesome followers"
   );
 
+  // Fill in post details without caption and submit
   await authUser.uploadImage("test-data/the-office-handshake.jpg");
   await authUser.setCaption("");
   await authUser.setPostStatus(true);
   await authUser.submitPost();
 
+  await authUser.waitForToastMessage();
   await expect(authUser.toastMessage).toHaveText("Please enter caption!");
 });
