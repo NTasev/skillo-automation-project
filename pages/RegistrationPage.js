@@ -15,12 +15,19 @@ export class RegistrationPage {
     this.signUpHeader = this.page.locator("h4");
 
     // Feedback locators
-    this.toastContainer = this.page.locator(".toast-container");
+    this.toastMessage = this.page.locator("#toast-container");
     this.invalidFeedback = this.page.locator(".invalid-feedback");
   }
 
   async goto() {
     await this.page.goto("/users/register");
+  }
+
+  async isLoaded() {
+    await this.page.waitForURL("/users/register");
+    await this.signUpHeader.waitFor({ state: "visible" });
+
+    console.log("✅ Registration page is loaded");
   }
 
   async fillUsername(username) {
@@ -56,10 +63,10 @@ export class RegistrationPage {
         await this.signInButton.click();
         console.log("✅ Sign-up button clicked successfully.");
         return true;
+      } else {
+        console.warn("⚠️ Sign-up button is disabled, skipping click.");
+        return false;
       }
-
-      console.warn("⚠️ Sign-up button is disabled, skipping click.");
-      return false;
     } catch (error) {
       console.error("❌ Failed to click the sign-up button:", error);
       throw error; // re-throw so the test still fails
@@ -81,9 +88,8 @@ export class RegistrationPage {
     await this.passwordInput.fill(password);
     await this.confirmPasswordInput.fill(confirmPassword);
     await this.publicInfoInput.fill(info);
-
     await this.signInButton.click();
 
-    await this.toastContainer.waitFor({ state: "visible" });
+    await this.toastMessage.waitFor({ state: "visible" });
   }
 }

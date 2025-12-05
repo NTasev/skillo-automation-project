@@ -8,7 +8,7 @@ export default defineConfig({
   testDir: "./tests",
   outputDir: "test-artifacts", // Centralized storage for videos, traces, screenshots
 
-  // Parallelization & retries // -----------------------------
+  // Parallelization & retries //
   fullyParallel: true,
   workers: 3, // Fixed to 3 workers
   retries: 1, // Max retries set to 1

@@ -4,6 +4,7 @@ export class ProfilePage {
 
     // Profile page locators
     this.profileHeader = this.page.locator("h2");
+    this.profileImage = this.page.locator(".profile-image-source");
     this.posts = this.page.locator("div.gallery-item");
 
     // Post locators
@@ -16,16 +17,13 @@ export class ProfilePage {
     await this.page.goto("/users/");
   }
 
-  // Pure wait method to ensure profile page is loaded with try-catch for better error handling
+  // Pure wait method to ensure profile page is loaded
   async isLoaded() {
-    try {
-      await this.page.waitForURL(/\/users\/\d+/); // regular expression pattern used to match certain strings—commonly in programming, search, or validation scenarios.
-      await this.profileHeader.waitFor({ state: "visible" });
-      console.log("✅ Profile page is loaded");
-    } catch (error) {
-      console.error("❌ Profile page did not load correctly:", error);
-      throw error;
-    }
+    await this.page.waitForURL(/\/users\/\d+/); // regular expression pattern used to match certain strings—commonly in programming, search, or validation scenarios.
+    await this.profileHeader.waitFor({ state: "visible" });
+    await this.profileImage.waitFor({ state: "visible" });
+
+    console.log("✅ Profile page is loaded");
   }
 
   // Open the most recent post with catch-retry logic for better error handling

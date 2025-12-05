@@ -4,5 +4,9 @@ playwright-report/
 test-results/
 playwright/.cache/
 test-artifacts/
+test-results/
+playwright/.cache/
+playwright/videos/
+playwright/screenshots/
 *.swp
 .env

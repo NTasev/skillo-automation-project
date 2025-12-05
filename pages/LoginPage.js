@@ -6,7 +6,7 @@ export class LoginPage {
     this.usernameInput = this.page.locator("#defaultLoginFormUsername");
     this.passwordInput = this.page.locator("#defaultLoginFormPassword");
     this.signInButton = this.page.locator("#sign-in-button");
-    this.signInHeader = this.page.locator(".h4.mb-4");
+    this.signInHeader = this.page.locator("p.h4.mb-4");
     this.rememberMeCheckbox = this.page.locator('input[type="checkbox"]');
 
     // Feedback locator
@@ -15,6 +15,14 @@ export class LoginPage {
 
   async goto() {
     await this.page.goto("/users/login");
+  }
+
+  // Verify that login page is loaded
+  async isLoaded() {
+    await this.page.waitForURL("/users/login");
+    await this.signInHeader.waitFor({ state: "visible" });
+
+    console.log("✅ Login page is loaded");
   }
 
   async fillUsername(username) {
@@ -32,7 +40,6 @@ export class LoginPage {
   // Handle Remember Me checkbox state based on parameter (checked/unchecked) and using try-catch for better error handling
   async checkRememberMe(shouldCheck = true) {
     try {
-      // Wait for checkbox to be visible
       await this.rememberMeCheckbox.waitFor({
         state: "visible",
       });
@@ -43,9 +50,7 @@ export class LoginPage {
         await this.rememberMeCheckbox.setChecked(shouldCheck);
         console.log(`✅ Remember Me checkbox is now set to ${shouldCheck}`);
       } else {
-        console.log(
-          `⚠️ Remember Me checkbox skipping check... already ${shouldCheck}`
-        );
+        console.log(`⚠️ Remember Me checkbox skipping check`);
       }
     } catch (error) {
       console.error(`❌ Failed to set Remember Me checkbox:`, error);
@@ -53,7 +58,7 @@ export class LoginPage {
     }
   }
 
-  // Click Sign-in button only if enabled, with logging for better traceability and try-catch for error handling
+  // Click Sign-in button only if enabled, with try-catch for better traceability and error handling
   async submitIfEnabled() {
     try {
       const isEnabled = await this.signInButton.isEnabled();
@@ -62,10 +67,10 @@ export class LoginPage {
         await this.signInButton.click();
         console.log("✅ Sign-in button clicked successfully");
         return true;
+      } else {
+        console.log("⚠️ Sign-in button is disabled, skipping click");
+        return false;
       }
-
-      console.warn("⚠️ Sign-in button is disabled, skipping click");
-      return false;
     } catch (error) {
       console.error("❌ Failed to click Sign-in button:", error);
       throw error;
@@ -76,15 +81,13 @@ export class LoginPage {
   async login(username, password, rememberMe = true) {
     await this.fillUsername(username);
     await this.fillPassword(password);
-    await this.checkRememberMe(rememberMe); // default true
+    await this.checkRememberMe(rememberMe);
     await this.signInButton.click();
 
     await this.toastMessage.waitFor({ state: "visible" });
   }
 
-  // Verify that login page is loaded after successful logout.spec.js
-  async isLoaded() {
-    await this.page.waitForURL("**/users/login");
-    await this.signInHeader.waitFor({ state: "visible" });
+  async waitForLogoutToastMessage() {
+    await this.toastMessage.waitFor({ state: "visible" });
   }
 }

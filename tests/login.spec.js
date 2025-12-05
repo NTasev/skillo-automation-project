@@ -2,7 +2,8 @@ import { test, expect } from "./fixtures/base.js";
 import testData from "../test-data/users.json" assert { type: "json" };
 
 test.beforeEach(async ({ loginPage }) => {
-  await loginPage.goto("/users/login");
+  await loginPage.goto();
+  await loginPage.isLoaded();
 });
 
 // Positive test cases - Successful Logins
@@ -21,10 +22,16 @@ testData.validCases.forEach((user) => {
 
     // Uses the username from the single object + success message assertion
     await loginPage.login(username, password, true);
+
     await expect(loginPage.toastMessage).toContainText("Successful login!");
 
-    // Navigate to profile and assert username
+    // Verify navigation t0 h0me page and then to profile page
+    await homePage.isLoaded();
+
+    // Navigate to profile page and verify correct username is displayed
     await homePage.goToProfile();
+    await profilePage.isLoaded();
+
     await expect(profilePage.profileHeader).toHaveText(user.expectedUsername);
   });
 });
@@ -58,7 +65,6 @@ testData.unregisteredCases.forEach((user) => {
 
     await loginPage.login(user.username, user.password, false);
 
-    // Assertions for wrong credentials toast message
     await expect(loginPage.toastMessage).toContainText(
       "Wrong username or password!"
     );

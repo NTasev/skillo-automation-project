@@ -5,7 +5,7 @@ export class HomePage {
     // Page elements locators
     this.linkProfile = this.page.locator("#nav-link-profile");
     this.linkNewPost = this.page.locator("#nav-link-new-post");
-    this.logoutButton = this.page.locator("a:has(i.fas.fa-sign-out-alt)");
+    this.logoutButton = this.page.locator("a:has(.fa-sign-out-alt)");
   }
 
   // Navigate to home page
@@ -15,14 +15,11 @@ export class HomePage {
 
   // Verify that home page is loaded with essential elements using try-catch for better error handling
   async isLoaded() {
-    try {
-      await this.linkProfile.waitFor({ state: "visible" });
-      await this.linkNewPost.waitFor({ state: "visible" });
-      console.log("✅ Home page is loaded");
-    } catch (error) {
-      console.error("❌ Home page did not load correctly:", error);
-      throw error;
-    }
+    await this.page.waitForURL("/posts/all");
+    await this.linkProfile.waitFor({ state: "visible" });
+    await this.linkNewPost.waitFor({ state: "visible" });
+
+    console.log("✅ Home page is loaded");
   }
 
   // Navigate to profile page

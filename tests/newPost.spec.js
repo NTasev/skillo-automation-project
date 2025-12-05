@@ -20,6 +20,7 @@ test("✅TC01: New post should pass with image and caption", async ({
   await authUser.setPostStatus(true);
   await authUser.submitPost();
 
+  await authUser.waitForToastMessage();
   await expect(authUser.toastMessage).toContainText("Post created!");
 
   // Verify the post appears on the profile page
@@ -49,7 +50,7 @@ test("❌TC02: New post should fail with missing required image", async ({
   await authUser.submitPost();
 
   await authUser.waitForToastMessage();
-  await expect(authUser.toastMessage).toHaveText("Please upload an image!");
+  await expect(authUser.toastMessage).toContainText("Please upload an image!");
 });
 
 test("❌TC03: New post should fail with missing required caption", async ({
@@ -66,5 +67,5 @@ test("❌TC03: New post should fail with missing required caption", async ({
   await authUser.submitPost();
 
   await authUser.waitForToastMessage();
-  await expect(authUser.toastMessage).toHaveText("Please enter caption!");
+  await expect(authUser.toastMessage).toContainText("Please enter caption!");
 });

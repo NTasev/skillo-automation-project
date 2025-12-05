@@ -8,12 +8,12 @@ export class NewPostPage {
     this.imagePreview = this.page.locator(".post-item");
     this.captionInput = this.page.locator('input[name="caption"]');
 
+    // File input (hidden) locator
+    this.fileInput = this.page.locator('input[type="file"].file'); // Correct file input (hidden Angular input)
+
     // Buttons and controls locators
     this.statusCheckbox = this.page.locator("#customSwitch2");
     this.createPostButton = this.page.locator("#create-post");
-
-    // File input (hidden) locator
-    this.fileInput = this.page.locator('input[type="file"].file'); // Correct file input (hidden Angular input)
 
     // Feedback locator
     this.toastMessage = this.page.locator("#toast-container");
@@ -21,6 +21,13 @@ export class NewPostPage {
 
   async goto() {
     await this.page.goto("/posts/create");
+  }
+
+  async isLoaded() {
+    await this.page.waitForURL("/posts/create");
+    await this.postHeading.waitFor({ state: "visible" });
+
+    console.log("✅ New Post page is loaded");
   }
 
   // Uploading image with error handling for better traceability

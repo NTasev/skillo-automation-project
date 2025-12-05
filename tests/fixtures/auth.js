@@ -1,31 +1,46 @@
+// Assuming base.js already extends with newPostPage
 import { test as base, expect } from "./base.js";
 
-// Authenticated user fixture
-
-// Logs in a user before running tests that require authentication and provides the newPostPage for test use.
 export const test = base.extend({
-  authUser: async ({ page, newPostPage }, use) => {
+  // 1. Core Fixture: Handles Authentication and Cleanup
+  authenticatedPage: async ({ page }, use) => {
     await page.goto("/users/login");
 
     await page
       .locator("#defaultLoginFormUsername")
-      .fill(process.env.TEST_USER_CREDENTIAL_AUTHUSER); // username from .env
+      .fill(process.env.TEST_USER_CREDENTIAL_AUTHUSER);
     await page
       .locator("#defaultLoginFormPassword")
-      .fill(process.env.TEST_USER_PASSWORD_AUTHUSER); // password from .env
+      .fill(process.env.TEST_USER_PASSWORD_AUTHUSER);
 
     await page.locator("#sign-in-button").click();
 
-    await expect(page.locator("#toast-container")).toContainText(
+    await page.locator("#toast-container").waitFor({ state: "visible" });
+    await expect(page.locator("#toast-container")).toHaveText(
       "Successful login!"
     );
 
     await page.waitForURL("/posts/all");
 
-    // Navigate to new post page for tests that require it
-    await newPostPage.goto();
+    // Provide the authenticated page to the test
+    await use(page);
 
-    // Provide the newPostPage to the tests
+    // CLEANUP for isolation
+    console.log("Clearing session state.");
+    const context = page.context();
+    await context.clearCookies();
+    await page.evaluate(() => localStorage.clear());
+    await page.evaluate(() => sessionStorage.clear());
+  },
+
+  // 2. Composed Fixture: Uses the authenticatedPage and navigates to the New Post page
+  authUser: async ({ authenticatedPage, newPostPage }, use) => {
+    // The 'authenticatedPage' setup phase (login) already ran.
+    // We now have the authenticated browser context.
+    await newPostPage.goto();
+    await newPostPage.isLoaded();
+
+    // Provide the required POM to the test
     await use(newPostPage);
   },
 });

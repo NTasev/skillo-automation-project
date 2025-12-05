@@ -5,12 +5,14 @@ import { invalidData } from "../test-data/registrationData.js";
 // Positive test case - Successful Registration //
 
 test.beforeEach(async ({ registrationPage }) => {
-  await registrationPage.goto("/users/register");
+  await registrationPage.goto();
+  await registrationPage.isLoaded();
 });
 
 test("✅TC01: Should register with valid user credentials", async ({
   registrationPage,
   homePage,
+  profilePage,
 }) => {
   // Generate random valid data for registration
   const randomUsername = generateUsername();
@@ -28,13 +30,17 @@ test("✅TC01: Should register with valid user credentials", async ({
     info: "Automation QA Test",
   });
 
-  await expect(registrationPage.toastContainer).toContainText(
+  await expect(registrationPage.toastMessage).toContainText(
     "Successful register!"
   );
 
-  // Verify redirection to home page after successful registration
+  // Verify navigation to home page and then to profile page
   await homePage.isLoaded();
-  await expect(homePage.linkProfile).toBeVisible();
+  await homePage.goToProfile();
+
+  // Verify profile page is loaded and username matches expected
+  await profilePage.isLoaded();
+  await expect(profilePage.profileHeader).toHaveText(randomUsername);
 });
 
 // Negative test cases - invalid data //
@@ -42,6 +48,8 @@ test("✅TC01: Should register with valid user credentials", async ({
 test("❌TC02: Registration should fails with weak password", async ({
   registrationPage,
 }) => {
+  await expect(registrationPage.signUpHeader).toHaveText("Sign up");
+
   // Fill form with invalid data from registrationData.js using first set
   await registrationPage.fillUsername(invalidData[0].username);
   await registrationPage.fillEmail(invalidData[0].email);
@@ -59,13 +67,13 @@ test("❌TC02: Registration should fails with weak password", async ({
   await expect(registrationPage.invalidFeedback).toHaveText(
     invalidData[0].expectedFeedback
   );
-
-  await expect(registrationPage.signUpHeader).toHaveText("Sign up");
 });
 
 test("❌TC03: Registration should fails when passwords do not match", async ({
   registrationPage,
 }) => {
+  await expect(registrationPage.signUpHeader).toHaveText("Sign up");
+
   // Fill form with invalid data from registrationData.js using second set
   await registrationPage.fillUsername(invalidData[1].username);
   await registrationPage.fillEmail(invalidData[1].email);
@@ -83,13 +91,13 @@ test("❌TC03: Registration should fails when passwords do not match", async ({
   await expect(registrationPage.invalidFeedback).toHaveText(
     invalidData[1].expectedFeedback
   );
-
-  await expect(registrationPage.signUpHeader).toHaveText("Sign up");
 });
 
 test("❌TC04: Registration should fails with missing username", async ({
   registrationPage,
 }) => {
+  await expect(registrationPage.signUpHeader).toHaveText("Sign up");
+
   // Fill form with invalid data from registrationData.js using third set
   await registrationPage.fillUsername(invalidData[2].username);
   await registrationPage.fillEmail(invalidData[2].email);
@@ -107,8 +115,6 @@ test("❌TC04: Registration should fails with missing username", async ({
   await expect(registrationPage.invalidFeedback).toHaveText(
     invalidData[2].expectedFeedback
   );
-
-  await expect(registrationPage.signUpHeader).toHaveText("Sign up");
 });
 
 // Clear cookies and storage after each test to maintain isolation //
