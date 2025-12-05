@@ -6,7 +6,7 @@ test.beforeEach(async ({ loginPage }) => {
   await loginPage.isLoaded();
 });
 
-// Positive test cases - Successful Logins
+// Positive test cases - Successful Logins //
 
 // The forEach loop dynamically creates individual, independent 'test' cases.
 testData.validCases.forEach((user) => {
@@ -36,7 +36,7 @@ testData.validCases.forEach((user) => {
   });
 });
 
-// Negative tests cases - Empty Data
+// Negative tests cases - Empty Data //
 
 // Test name uses specific empty credentials from users.json
 testData.emptyCases.forEach((user) => {
@@ -55,7 +55,7 @@ testData.emptyCases.forEach((user) => {
   });
 });
 
-// Negative test cases - Unregistered Data
+// Negative test cases - Unregistered Data //
 
 testData.unregisteredCases.forEach((user) => {
   test(`❌${user.id}: Login should fail with ${user.description}`, async ({

@@ -109,8 +109,6 @@ skillo-automation-project/
 
 Some tests may fail intermittently on Firefox due to locator inconsistencies.
 
-All locators are adapted for Angular framework but may require updates in future versions.
-
 ## 🔮 Future Improvements
 
 Implement full E2E workflow: registration → login → post → logout.
