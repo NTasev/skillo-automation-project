@@ -26,8 +26,6 @@ export class RegistrationPage {
   async isLoaded() {
     await this.page.waitForURL("/users/register");
     await this.signUpHeader.waitFor({ state: "visible" });
-
-    console.log("✅ Registration page is loaded");
   }
 
   async fillUsername(username) {

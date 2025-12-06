@@ -20,8 +20,6 @@ export class LoginPage {
   async isLoaded() {
     await this.page.waitForURL("/users/login");
     await this.signInHeader.waitFor({ state: "visible" });
-
-    console.log("✅ Login page is loaded");
   }
 
   async fillUsername(username) {

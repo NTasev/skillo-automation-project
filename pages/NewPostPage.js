@@ -26,8 +26,6 @@ export class NewPostPage {
   async isLoaded() {
     await this.page.waitForURL("/posts/create");
     await this.postHeading.waitFor({ state: "visible" });
-
-    console.log("✅ New Post page is loaded");
   }
 
   // Uploading image with error handling for better traceability

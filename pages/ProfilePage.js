@@ -21,8 +21,6 @@ export class ProfilePage {
     await this.page.waitForURL(/\/users\/\d+/); // regular expression pattern used to match certain strings—commonly in programming, search, or validation scenarios.
     await this.profileHeader.waitFor({ state: "visible" });
     await this.profileImage.waitFor({ state: "visible" });
-
-    console.log("✅ Profile page is loaded");
   }
 
   // Open the most recent post with catch-retry logic for better error handling

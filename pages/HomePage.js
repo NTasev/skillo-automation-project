@@ -18,8 +18,6 @@ export class HomePage {
     await this.page.waitForURL("/posts/all");
     await this.linkProfile.waitFor({ state: "visible" });
     await this.linkNewPost.waitFor({ state: "visible" });
-
-    console.log("✅ Home page is loaded");
   }
 
   // Navigate to profile page
