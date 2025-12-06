@@ -9,6 +9,7 @@ test("✅TC01: Logout should redirects logged-in user to login page", async ({
   // Login first to be able to logout
   await loginPage.goto();
   await loginPage.isLoaded();
+
   await expect(loginPage.signInHeader).toHaveText("Sign in");
 
   // Login with valid credentials (hardcoded in .env file)
@@ -16,6 +17,7 @@ test("✅TC01: Logout should redirects logged-in user to login page", async ({
     process.env.TEST_USER_CREDENTIAL_LOGOUT,
     process.env.TEST_USER_CREDENTIAL_LOGOUT_PASSWORD
   );
+  
   await expect(loginPage.toastMessage).toHaveText("Successful login!");
 
   // Verify home page is loaded

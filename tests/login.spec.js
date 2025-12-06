@@ -22,16 +22,14 @@ testData.validCases.forEach((user) => {
 
     // Uses the username from the single object + success message assertion
     await loginPage.login(username, password, true);
-
     await expect(loginPage.toastMessage).toContainText("Successful login!");
 
     // Verify navigation to home page and then to profile page
     await homePage.isLoaded();
+    await homePage.goToProfile();
 
     // Navigate to profile page and verify correct username is displayed
-    await homePage.goToProfile();
     await profilePage.isLoaded();
-
     await expect(profilePage.profileHeader).toHaveText(user.expectedUsername);
   });
 });
