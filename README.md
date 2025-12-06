@@ -105,10 +105,10 @@ skillo-automation-project/
 - Fixtures handle reusable setups and login sessions.
 - Tests are independent and data-driven where applicable.
 - Different data testing approaches for different scenarios.
+- UI cleanup after successfull post creation.
 
 ## 🐛 Known Issues
 
-- Posts are being created but not deleted.
 - Unpredictable fails with firefox/nighty browser.
 
 ## 🔮 Future Improvements

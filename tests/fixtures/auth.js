@@ -24,13 +24,6 @@ export const test = base.extend({
 
     // Provide the authenticated page to the test
     await use(page);
-
-    // CLEANUP for isolation
-    console.log("🧹 Clearing session state");
-    const context = page.context();
-    await context.clearCookies();
-    await page.evaluate(() => localStorage.clear());
-    await page.evaluate(() => sessionStorage.clear());
   },
 
   // 2. Composed Fixture: Uses the authenticatedPage and navigates to the New Post page

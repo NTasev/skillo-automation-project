@@ -69,3 +69,19 @@ test("❌TC03: New post should fail with missing required caption", async ({
   await authUser.waitForToastMessage();
   await expect(authUser.toastMessage).toContainText("Please enter caption!");
 });
+
+test.afterEach(
+  "🧹Cleanup: Delete the recent post to avoid image spamming",
+  async ({ profilePage }) => {
+    await profilePage.goto();
+    await profilePage.isLoaded();
+
+    const postDeleted = await profilePage.deleteRecentPost();
+
+    if (postDeleted) {
+      await expect(profilePage.toastMessage).toContainText("Post Deleted!");
+    } else {
+      await expect(profilePage.noPostsMessage).toHaveText("No posts here");
+    }
+  }
+);

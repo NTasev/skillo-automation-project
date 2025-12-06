@@ -67,11 +67,3 @@ testData.unregisteredCases.forEach((user) => {
     );
   });
 });
-
-// Clear cookies and storage after each test to maintain isolation after remember me checkbox //
-test.afterEach(async ({ page }) => {
-  const context = page.context();
-  await context.clearCookies();
-  await page.evaluate(() => localStorage.clear());
-  await page.evaluate(() => sessionStorage.clear());
-});

@@ -116,11 +116,3 @@ test("❌TC04: Registration should fails with missing username", async ({
     invalidData[2].expectedFeedback
   );
 });
-
-// Clear cookies and storage after each test to maintain isolation //
-test.afterEach(async ({ page }) => {
-  const context = page.context();
-  await context.clearCookies();
-  await page.evaluate(() => localStorage.clear());
-  await page.evaluate(() => sessionStorage.clear());
-});
