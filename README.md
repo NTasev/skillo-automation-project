@@ -104,6 +104,7 @@ skillo-automation-project/
 - Common actions and locators defined in every POM class.
 - Fixtures handle reusable setups and login sessions.
 - Tests are independent and data-driven where applicable.
+- Different data testing approaches for different scenarios.
 
 ## 🐛 Known Issues
 
