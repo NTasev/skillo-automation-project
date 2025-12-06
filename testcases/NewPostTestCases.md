@@ -1,7 +1,5 @@
 # 📘 New Post – Test Cases
 
-==========================
-
 ## 🟢 TC01 – Create new post with image and verify it in the profile
 
 Type: Positive

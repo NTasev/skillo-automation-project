@@ -1,7 +1,5 @@
 # 📘 Logout – Test Case
 
-=======================
-
 ## 🟢 TC01 – Successful logout with valid user
 
 Type: Positive
