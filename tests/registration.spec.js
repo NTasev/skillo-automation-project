@@ -59,7 +59,7 @@ test("❌TC02: Registration should fails with weak password", async ({
   await registrationPage.fillPublicInfo(invalidData[0].info);
 
   // Attempt to submit and verify after successful validation from POM
-  const clicked = await registrationPage.clickIfEnabled();
+  const clicked = await registrationPage.submitIfEnabled();
   await expect(clicked).toBe(false);
 
   // Verify error feedback while taking it from registrationData.js
@@ -83,7 +83,7 @@ test("❌TC03: Registration should fails when passwords do not match", async ({
   await registrationPage.fillPublicInfo(invalidData[1].info);
 
   // Attempt to submit and verify after successful validation from POM
-  const clicked = await registrationPage.clickIfEnabled();
+  const clicked = await registrationPage.submitIfEnabled();
   await expect(clicked).toBe(false);
 
   // Verify error feedback while taking it from registrationData.js
@@ -107,7 +107,7 @@ test("❌TC04: Registration should fails with missing username", async ({
   await registrationPage.fillPublicInfo(invalidData[2].info);
 
   // Attempt to submit and verify after successful validation from POM
-  const clicked = await registrationPage.clickIfEnabled();
+  const clicked = await registrationPage.submitIfEnabled();
   await expect(clicked).toBe(false);
 
   // Verify error feedback while taking it from registrationData.js

@@ -37,15 +37,11 @@ export class LoginPage {
   // Handle Remember Me checkbox state based on parameter (checked/unchecked) and using try-catch for better error handling
   async checkRememberMe(shouldCheck = true) {
     try {
-      await this.rememberMeCheckbox.waitFor({
-        state: "visible",
-      });
-
       const isChecked = await this.rememberMeCheckbox.isChecked();
 
       if (isChecked !== shouldCheck) {
         await this.rememberMeCheckbox.setChecked(shouldCheck);
-        console.log(`✅ Remember Me checkbox is now set to ${shouldCheck}`);
+        console.log(`✅ Remember Me checkbox is now set`);
       } else {
         console.log(`⚠️ Remember Me checkbox skipping check`);
       }

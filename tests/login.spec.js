@@ -25,7 +25,7 @@ testData.validCases.forEach((user) => {
 
     await expect(loginPage.toastMessage).toContainText("Successful login!");
 
-    // Verify navigation t0 h0me page and then to profile page
+    // Verify navigation to home page and then to profile page
     await homePage.isLoaded();
 
     // Navigate to profile page and verify correct username is displayed

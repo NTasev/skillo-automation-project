@@ -24,6 +24,7 @@ export default defineConfig({
     video: "retain-on-failure",
     actionTimeout: 0,
     navigationTimeout: 0,
+    headless: true,
 
     // Use stable Chromium for reliability
     browserName: "chromium",

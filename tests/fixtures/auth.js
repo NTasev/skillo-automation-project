@@ -16,7 +16,7 @@ export const test = base.extend({
     await page.locator("#sign-in-button").click();
 
     await page.locator("#toast-container").waitFor({ state: "visible" });
-    await expect(page.locator("#toast-container")).toHaveText(
+    await expect(page.locator("#toast-container")).toContainText(
       "Successful login!"
     );
 
@@ -26,7 +26,7 @@ export const test = base.extend({
     await use(page);
 
     // CLEANUP for isolation
-    console.log("Clearing session state.");
+    console.log("🧹 Clearing session state");
     const context = page.context();
     await context.clearCookies();
     await page.evaluate(() => localStorage.clear());

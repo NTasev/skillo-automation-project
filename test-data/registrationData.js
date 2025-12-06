@@ -12,7 +12,7 @@ export const invalidData = [
   },
   {
     testName: "password do not match",
-    username: "JhonyBravo",
+    username: "BuggyTheBug",
     email: "test@example.com",
     date: "2000-01-01",
     password: "Password123!", // valid

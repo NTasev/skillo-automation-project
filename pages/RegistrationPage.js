@@ -53,11 +53,11 @@ export class RegistrationPage {
   }
 
   // Click the sign-up button if enabled with better traceability and error handling
-  async clickIfEnabled() {
+  async submitIfEnabled() {
     try {
-      const enabled = await this.signInButton.isEnabled();
+      const isEnabled = await this.signInButton.isEnabled();
 
-      if (enabled) {
+      if (isEnabled) {
         await this.signInButton.click();
         console.log("✅ Sign-up button clicked successfully.");
         return true;

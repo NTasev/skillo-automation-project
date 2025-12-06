@@ -8,31 +8,30 @@ export class HomePage {
     this.logoutButton = this.page.locator("a:has(.fa-sign-out-alt)");
   }
 
-  // Navigate to home page
   async goto() {
     await this.page.goto("/posts/all");
   }
 
-  // Verify that home page is loaded with essential elements using try-catch for better error handling
+  // Verify that the home page is loaded
   async isLoaded() {
     await this.page.waitForURL("/posts/all");
     await this.linkProfile.waitFor({ state: "visible" });
     await this.linkNewPost.waitFor({ state: "visible" });
   }
 
-  // Navigate to profile page
+  // Navigate to the user's profile page
   async goToProfile() {
     await this.linkProfile.click();
     await this.page.waitForURL(/\/users\/\d+/);
   }
 
-  // Navigate to new post page
+  // Navigate to the new post creation page
   async goToNewPost() {
     await this.linkNewPost.click();
     await this.page.waitForURL("**/posts/create");
   }
 
-  // Logout the valid user from logout.spec.js
+  // Log out the current user
   async logout() {
     await this.logoutButton.click();
   }
