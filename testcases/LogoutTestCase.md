@@ -5,7 +5,7 @@
 ## 🟢 TC01 – Successful logout with valid user
 
 Type: Positive
-Goal: Verify that a logged-in user can successfully log out and session is cleared.
+Goal: Verify that a logged-in user can successfully log out.
 
 Steps to Reproduce:
 

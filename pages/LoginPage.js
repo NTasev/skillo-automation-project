@@ -17,7 +17,6 @@ export class LoginPage {
     await this.page.goto("/users/login");
   }
 
-  // Verify that login page is loaded
   async isLoaded() {
     await this.page.waitForURL("/users/login");
     await this.signInHeader.waitFor({ state: "visible" });

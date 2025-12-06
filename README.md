@@ -107,7 +107,8 @@ skillo-automation-project/
 
 ## 🐛 Known Issues
 
-Some tests may fail intermittently on Firefox due to locator inconsistencies.
+- Posts are being created but not deleted.
+- Unpredictable fails with firefox/nighty browser.
 
 ## 🔮 Future Improvements
 
@@ -117,7 +118,7 @@ Add negative tests for image upload limits (size, format).
 
 Expand cross-browser/device testing in playwright.config.js.
 
-Include API test coverage for key endpoints.
+Include API test coverage for key endpoints and post deletes.
 
 ## 👤 Author
 

@@ -17,7 +17,6 @@ export class ProfilePage {
     await this.page.goto("/users/");
   }
 
-  // Pure wait method to ensure profile page is loaded
   async isLoaded() {
     await this.page.waitForURL(/\/users\/\d+/); // regular expression pattern used to match certain strings—commonly in programming, search, or validation scenarios.
     await this.profileHeader.waitFor({ state: "visible" });

@@ -38,7 +38,6 @@ testData.validCases.forEach((user) => {
 
 // Negative tests cases - Empty Data //
 
-// Test name uses specific empty credentials from users.json
 testData.emptyCases.forEach((user) => {
   test(`❌ ${user.id}: Login should fail with ${user.description}`, async ({
     loginPage,
