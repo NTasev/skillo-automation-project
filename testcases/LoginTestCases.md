@@ -19,13 +19,13 @@ Steps to Reproduce:
 
 Expected Result:
 
-User is successfully logged in. Message "Successful login!" appear.
+- User is successfully logged in. Message "Successful login!" appear.
 
-Redirected to homepage.
+- Redirected to homepage.
 
 Actual Result:
 
-User is logged in successfully, redirected to homepage.
+- User is logged in successfully, redirected to homepage.
 
 ## 🟢 TC02 – Successful Login with Valid Email and Password
 
@@ -46,15 +46,15 @@ Steps to Reproduce:
 
 Expected Result:
 
-User is successfully logged in.
+- User is successfully logged in.
 
-Message "Successful login!" appears.
+- Message "Successful login!" appears.
 
-User is redirected to the homepage.
+- User is redirected to the homepage.
 
 Actual Result:
 
-User is logged in successfully (to be filled after test execution).
+- User is logged in successfully (to be filled after test execution).
 
 ## 🔴 TC03 - Login Fails: Empty Password Field
 
@@ -69,15 +69,19 @@ Steps to Reproduce:
 
 3. Leave password field empty.
 
-4. Click “Sign in”.
-
 Expected Result:
 
-User remains on the Login page with empty password field.
+- “Sign in” button is disabled.
+
+- User remains on the Login page.
+
+- No login request is sent.
 
 Actual Result:
 
-User cannot log in and stays on the Login page.
+- “Sign in” button remains disabled.
+
+- User stays on the Login page.
 
 ## 🔴 TC04 – Login Fails: Empty Username Field
 
@@ -88,20 +92,23 @@ Steps to Reproduce:
 
 1. Navigate to the Login page.
 
-2. Leave Username/Password empty.
-
-3. Click “Sign in”.
+2. Leave Password empty.
 
 Expected Result:
 
-Server message shows: “Username and password are required.”
+- “Sign in” button is disabled.
 
-Login is blocked.
+- Login is blocked.
+
+- User remains on the Login page.
+
+- Login is blocked.
 
 Actual Result:
 
-Form shows an error banner: “Wrong username or password”.
-User stays on the login page; no request is sent.
+- “Sign in” button remains disabled.
+
+- User stays on the Login page.
 
 ## 🔴 TC05 – Login Fails: Unregistered User
 
@@ -120,10 +127,10 @@ Steps to Reproduce:
 
 Expected Result:
 
-Server displays “Wrong username or password”.
+- Server displays “Wrong username or password”.
 
-Login is blocked.
+- Login is blocked.
 
 Actual Result
 
-Server displays “Wrong username or password”. User remains on the login page; cannot log in.
+- Server displays “Wrong username or password”. User remains on the login page; cannot log in.

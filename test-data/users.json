@@ -25,7 +25,7 @@
     },
     {
       "id": "TC04",
-      "username": "bug_hunter",
+      "username": "bugHunter",
       "password": "",
       "description": "empty password field"
     }
@@ -34,15 +34,9 @@
   "unregisteredCases": [
     {
       "id": "TC05",
-      "username": "ClickUntilBreak",
-      "password": "click12345",
+      "username": "WizardOfOz",
+      "password": "wizard123",
       "description": "wrong email and password"
-    },
-    {
-      "id": "TC06",
-      "username": "RogueCorgi",
-      "password": "doggosRule!",
-      "description": "wrong username and password"
     }
   ]
 }

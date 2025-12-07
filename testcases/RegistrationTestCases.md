@@ -15,13 +15,17 @@ Steps to Reproduce:
 
 Expected Result:
 
-User account is successfully created.
+- User account is created.
+
+- App redirects to homepage.
+
+- User appears as logged in.
 
 App redirects to homepage and user appears as logged-in.
 
 Actual Result:
 
-User is created successfully. App redirects to homepage.
+- User is created successfully.
 
 ## 🔴 TC02 – Registration Fails: Weak or Invalid Password
 
@@ -32,21 +36,23 @@ Steps to Reproduce:
 
 1. Navigate to the Registration page.
 
-2. Enter a password that doesn’t meet required criteria (e.g., digit and uppercase letter!).
+2. Fill in all fields with valid data except password (use weak/invalid password).
 
-3. Fill other fields with valid data.
+3. Assert that the “Sign in” button is disabled.
 
-4. Click “Sign in”.
+4. Optionally, check the inline error message for password rules.
 
 Expected Result:
 
-Password field displays error (e.g., “Must contain digit and uppercase letter!”)
+- Password field displays error (e.g., “Must contain digit and uppercase letter!”)
 
-Registration is blocked.
+- Registration is blocked.
+
+- Button remains disabled.
 
 Actual Result:
 
-Form displays error below password field. Registration is prevented and no account is created.
+- Form displays password error; submission is prevented.
 
 ## 🔴 TC03 – Registration Fails: Passwords Do Not Match
 
@@ -59,23 +65,17 @@ Steps to Reproduce:
 
 2. Fill other fields with valid data.
 
-3. Enter a valid password in the Password field (e.g., Password123!).
+3. Enter mismatching passwords.
 
-4. Enter a different password in the Confirm Password field (e.g., password1234!).
+4. Assert that the “Sign in” button is disabled.
 
-5. Click “Sign in”.
+5. Check that the error “Passwords do not match” appears.
 
 Expected Result:
 
-Server or form validation displays an error: “Passwords do not match.”
+- Form shows error; account is not created.
 
-Registration is blocked.
-
-Actual Result:
-
-Error message appears: “Passwords do not match.”
-
-User remains on registration page; account is not created.
+- Button remains disabled.
 
 ## 🔴 TC04 – Registration Fails: Missing Username
 
@@ -90,14 +90,10 @@ Steps to Reproduce
 
 3. Fill all other required fields.
 
-4. Click “Sign in”.
+4. Check for inline error: “This field is required.”
 
 Expected Result:
 
-Error message appears: “This field is required.”
+- Registration is blocked.
 
-Form does not submit.
-
-Actual Result:
-
-Inline validation appears: “This field is required.” Submit is blocked.
+- Button remains disabled.

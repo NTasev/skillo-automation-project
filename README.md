@@ -70,27 +70,38 @@ skillo-automation-project/
 
 ## 🧪 Test Scenarios
 
-| TC      | Description                | Steps                                            | Expected                               | Actual                       |
-| ------- | -------------------------- | ------------------------------------------------ | -------------------------------------- | ---------------------------- |
-| ✅ TC01 | Login with Username        | Navigate → Enter credentials → Sign in           | User logged in, redirected             | Works as expected            |
-| ✅ TC02 | Login with Email           | Enter email → Sign in                            | User logged in, redirected             | Works as expected            |
-| 🔴 TC03 | Empty Password             | Enter username → Leave password empty → Sign in  | Error shown                            | Login prevented              |
-| 🔴 TC04 | Empty Username             | Leave username empty → Enter password → Sign in  | Validation error                       | "Wrong username or password" |
-|         |                            |                                                  |                                        |                              |
-| ------- | -------------------        | -----------------------------------------------  | --------------------------             | ---------------------------- |
-| ✅ TC01 | Login with Username        | Navigate → Enter credentials → Sign in           | User logged in, redirected             | Works as expected            |
-| ✅ TC02 | Login with Email           | Enter email → Sign in                            | User logged in, redirected             | Works as expected            |
-| 🔴 TC03 | Empty Password             | Enter username → Leave password empty → Sign in  | Error shown                            | Login prevented              |
-| 🔴 TC04 | Empty Username             | Leave username empty → Enter password → Sign in  | Validation error                       | "Wrong username or password" |
-| 🔴 TC05 | Unregistered User          | Enter unregistered username → Sign in            | Error shown                            | Login blocked                |
-|         |                            |                                                  |                                        |                              |
-| ------  | -----------------          | --------------------------                       | ------------------------------------   | -----------------            |
-| ✅ TC01 | Successful Logout          | Login → Open menu → Logout                       | Session cleared; redirected to login   | Works as expected            |
-|         |                            |                                                  |                                        |                              |
-| ------- | -------------------------- | ------------------------------------------------ | -------------------------------------- | ---------------------        |
-| ✅ TC01 | Create New Post with Image | Upload image → Add caption → Create post         | Post appears in feed/profile           | Post created; visible        |
-| 🔴 TC02 | Missing Image              | Enter caption → Create post                      | Error shown: "Please upload an image!" | Error displayed              |
-| 🔴 TC03 | Missing Caption            | Upload image → Leave caption empty → Create post | Inline error; post blocked             | Error displayed              |
+## Login Test Cases
+
+| TC      | Description         | Steps                                        | Expected                   | Actual                       |
+| ------- | ------------------- | -------------------------------------------- | -------------------------- | ---------------------------- |
+| ✅ TC01 | Login with Username | Navigate → Enter username & password → Click | User logged in, redirected | Works as expected            |
+| ✅ TC02 | Login with Email    | Enter email & password → Click               | User logged in, redirected | Works as expected            |
+| 🔴 TC03 | Empty Password      | Enter username → Leave password empty        | Error shown                | Login prevented              |
+| 🔴 TC04 | Empty Username      | Leave username empty → Enter password        | Validation error           | "Wrong username or password" |
+| 🔴 TC05 | Unregistered User   | Enter unregistered credentials → Click       | Error shown                | Login blocked                |
+
+## Registration Test Cases
+
+| TC      | Description             | Steps                                         | Expected                                     | Actual            |
+| ------- | ----------------------- | --------------------------------------------- | -------------------------------------------- | ----------------- |
+| ✅ TC01 | Successful Registration | Fill all required fields → Click "Sign in"    | User account created, redirected to homepage | Works as expected |
+| 🔴 TC02 | Weak/Invalid Password   | Fill invalid password → Button disabled       | Password error shown, registration blocked   | Error displayed   |
+| 🔴 TC03 | Passwords Do Not Match  | Enter mismatching passwords → Button disabled | Error shown, registration blocked            | Error displayed   |
+| 🔴 TC04 | Missing Username        | Leave username empty → Button disabled        | Inline error: "This field is required"       | Error displayed   |
+
+## Logout Test Cases
+
+| TC      | Description       | Steps                            | Expected                    | Actual            |
+| ------- | ----------------- | -------------------------------- | --------------------------- | ----------------- |
+| ✅ TC01 | Successful Logout | Login → Open menu → Click Logout | Session cleared; redirected | Works as expected |
+
+## Post Test Cases
+
+| TC      | Description            | Steps                                                | Expected                         | Actual                |
+| ------- | ---------------------- | ---------------------------------------------------- | -------------------------------- | --------------------- |
+| ✅ TC01 | Create Post with Image | Upload image → Add caption → Click "Create"          | Post appears in feed/profile     | Post created; visible |
+| 🔴 TC02 | Missing Image          | Enter caption only → Button disabled                 | Error: "Please upload an image!" | Error displayed       |
+| 🔴 TC03 | Missing Caption        | Upload image → Leave caption empty → Button disabled | Inline error; post blocked       | Error displayed       |
 
 ## 📊 Test Coverage
 

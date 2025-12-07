@@ -26,6 +26,9 @@ testData.validCases.forEach((user) => {
 
     // Verify navigation to home page and then to profile page
     await homePage.isLoaded();
+    await expect(homePage.linkProfile).toHaveText("Profile");
+    await expect(homePage.linkNewPost).toHaveText("New post");
+
     await homePage.goToProfile();
 
     // Navigate to profile page and verify correct username is displayed
@@ -46,9 +49,12 @@ testData.emptyCases.forEach((user) => {
     await loginPage.fillUsername(user.username);
     await loginPage.fillPassword(user.password);
 
-    // Assert that the submit button cannot be clicked
-    const clicked = await loginPage.submitIfEnabled();
-    await expect(clicked).toBe(false);
+    // Verify that the sign-in button is disabled when fields are empty
+    await expect(loginPage.signInButton).toBeDisabled();
+
+    // Verify that user is still on the login page
+    await expect(loginPage.signInHeader).toBeVisible();
+    await expect(loginPage.signInHeader).toHaveText("Sign in");
   });
 });
 
@@ -62,8 +68,11 @@ testData.unregisteredCases.forEach((user) => {
 
     await loginPage.login(user.username, user.password, false);
 
+    // Verify error toast message for wrong credentials and that user remains on login page
     await expect(loginPage.toastMessage).toContainText(
       "Wrong username or password!"
     );
+    await expect(loginPage.signInHeader).toBeVisible();
+    await expect(loginPage.signInHeader).toHaveText("Sign in");
   });
 });

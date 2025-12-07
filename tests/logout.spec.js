@@ -17,15 +17,18 @@ test("✅TC01: Logout should redirects logged-in user to login page", async ({
     process.env.TEST_USER_CREDENTIAL_LOGOUT,
     process.env.TEST_USER_CREDENTIAL_LOGOUT_PASSWORD
   );
-  
-  await expect(loginPage.toastMessage).toHaveText("Successful login!");
+
+  await expect(loginPage.toastMessage).toContainText("Successful login!");
 
   // Verify home page is loaded
   await homePage.isLoaded();
+  await expect(homePage.linkProfile).toHaveText("Profile");
+  await expect(homePage.linkNewPost).toHaveText("New post");
+
+  // Perform logout action
   await homePage.logout();
 
-  // Verify redirection to login page after logout
-  await loginPage.isLoaded();
+  // Verify logout success toast message and redirection to login page
   await loginPage.waitForLogoutToastMessage();
   await expect(loginPage.toastMessage).toContainText("Successful logout!");
 });

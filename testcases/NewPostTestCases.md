@@ -19,19 +19,19 @@ Steps to Reproduce:
 
 Expected Result:
 
-Post appears in the user profile with the correct caption and image.
+- Post appears in the user profile with the correct caption and image.
 
-Clicking the image opens it properly (full view or modal) with no errors.
+- Clicking the image opens it properly (full view or modal) with no errors.
 
-The post matches what was submitted in the New Post form.
+- The post matches what was submitted in the New Post form.
 
 Actual Result:
 
-Post is visible in the profile list.
+- Post is visible in the profile list.
 
-Image opens correctly when clicked.
+- Image opens correctly when clicked.
 
-Description of the image match the submitted data.
+- Description of the image match the submitted data.
 
 ## 🔴 TC02 – New Post Fails: Missing required image
 
@@ -48,13 +48,13 @@ Steps to Reproduce:
 
 Expected Result:
 
-Inline validation or server error appears: "Please upload an image!".
+- Inline validation or server error appears: "Please upload an image!".
 
-Post is not created.
+- Post is not created.
 
 Actual Result:
 
-Form shows error message; The user is still in the new post page form.
+- Form shows error message; The user is still in the new post page form.
 
 ## 🔴 TC03 – New Post Fails: Missing Required Caption
 
@@ -73,10 +73,10 @@ Steps to Reproduce:
 
 Expected Result:
 
-Inline validation or server error appears: “Please enter a caption”.
+- Form shows error message: “Please enter a caption”.
 
-Post is not created.
+- Post is not created.
 
 Actual Result:
 
-Form shows error message; The user is still in the new post page form.
+- Form shows error message; The user is still in the new post page form.

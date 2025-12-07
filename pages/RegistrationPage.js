@@ -52,25 +52,6 @@ export class RegistrationPage {
     await this.publicInfoInput.fill(info);
   }
 
-  // Click the sign-up button if enabled with better traceability and error handling
-  async submitIfEnabled() {
-    try {
-      const isEnabled = await this.signInButton.isEnabled();
-
-      if (isEnabled) {
-        await this.signInButton.click();
-        console.log("✅ Sign-up button clicked successfully.");
-        return true;
-      } else {
-        console.warn("⚠️ Sign-up button is disabled, skipping click.");
-        return false;
-      }
-    } catch (error) {
-      console.error("❌ Failed to click the sign-up button:", error);
-      throw error; // re-throw so the test still fails
-    }
-  }
-
   // Perform full registration action
   async registration({
     username,

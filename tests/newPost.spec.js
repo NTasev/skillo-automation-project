@@ -23,8 +23,11 @@ test("✅TC01: New post should pass with image and caption", async ({
   await authUser.waitForToastMessage();
   await expect(authUser.toastMessage).toContainText("Post created!");
 
-  // Verify the post appears on the profile page
+  // Navigate to the user profile to verify the new post
   await profilePage.isLoaded();
+  await expect(profilePage.profileHeader).toHaveText(username);
+
+  // Open the recent post to verify details
   await profilePage.openRecentPost();
 
   // Assertions to verify post details

@@ -25,12 +25,6 @@ export class HomePage {
     await this.page.waitForURL(/\/users\/\d+/);
   }
 
-  // Navigate to the new post creation page
-  async goToNewPost() {
-    await this.linkNewPost.click();
-    await this.page.waitForURL("**/posts/create");
-  }
-
   // Log out the current user
   async logout() {
     await this.logoutButton.click();

@@ -51,25 +51,6 @@ export class LoginPage {
     }
   }
 
-  // Click Sign-in button only if enabled, with try-catch for better traceability and error handling
-  async submitIfEnabled() {
-    try {
-      const isEnabled = await this.signInButton.isEnabled();
-
-      if (isEnabled) {
-        await this.signInButton.click();
-        console.log("✅ Sign-in button clicked successfully");
-        return true;
-      } else {
-        console.log("⚠️ Sign-in button is disabled, skipping click");
-        return false;
-      }
-    } catch (error) {
-      console.error("❌ Failed to click Sign-in button:", error);
-      throw error;
-    }
-  }
-
   // Main login flow
   async login(username, password, rememberMe = true) {
     await this.fillUsername(username);

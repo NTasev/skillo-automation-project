@@ -15,16 +15,14 @@ Steps to Reproduce:
 
 Expected Result:
 
-User is logged out successfully. Logout message appear.
+- User is logged out successfully. Logout message appear.
 
-Redirected to the login page.
-
-User session is cleared (no user icon visible, cannot access protected pages).
+- Redirected to the login page.
 
 Actual Result:
 
-User is logged out. Logout message appear.
+- User is logged out. Logout message appear.
 
-Redirected to login page.
+- Redirected to login page.
 
-User menu is no longer visible; attempts to access protected routes redirect back to login.
+- User menu is no longer visible; attempts to access protected routes redirect back to login.

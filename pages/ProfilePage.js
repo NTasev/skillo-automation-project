@@ -33,11 +33,11 @@ export class ProfilePage {
 
   // Open the most recent post with catch-retry logic for better error handling
   async openRecentPost() {
-    const firstPost = this.posts.first();
+    const recentPost = this.posts.first();
 
     try {
-      await firstPost.waitFor({ state: "visible" });
-      await firstPost.click();
+      await recentPost.waitFor({ state: "visible", timeout: 5000 });
+      await recentPost.click();
       console.log("✅ Opened the most recent post.");
     } catch (error) {
       console.log(
@@ -46,8 +46,8 @@ export class ProfilePage {
       );
       try {
         // Retry after a short wait
-        await firstPost.waitFor({ state: "visible" });
-        await firstPost.click();
+        await recentPost.waitFor({ state: "visible", timeout: 5000 });
+        await recentPost.click();
         console.log("✅ Successfully opened the post on retry.");
       } catch (retryError) {
         console.error(
@@ -71,7 +71,6 @@ export class ProfilePage {
         await this.deleteButton.click();
 
         // Click confirm delete button
-        await this.confirmDeleteButton.waitFor({ state: "visible" });
         await this.confirmDeleteButton.click();
 
         // Wait for toast message to confirm deletion

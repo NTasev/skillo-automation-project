@@ -36,6 +36,9 @@ test("✅TC01: Should register with valid user credentials", async ({
 
   // Verify navigation to home page and then to profile page
   await homePage.isLoaded();
+  await expect(homePage.linkProfile).toHaveText("Profile");
+  await expect(homePage.linkNewPost).toHaveText("New post");
+
   await homePage.goToProfile();
 
   // Verify profile page is loaded and username matches expected
@@ -58,9 +61,7 @@ test("❌TC02: Registration should fails with weak password", async ({
   await registrationPage.fillConfirmPassword(invalidData[0].confirmPassword);
   await registrationPage.fillPublicInfo(invalidData[0].info);
 
-  // Attempt to submit and verify after successful validation from POM
-  const clicked = await registrationPage.submitIfEnabled();
-  await expect(clicked).toBe(false);
+  await expect(registrationPage.signInButton).toBeDisabled();
 
   // Verify error feedback while taking it from registrationData.js
   await expect(registrationPage.invalidFeedback).toBeVisible();
@@ -82,9 +83,7 @@ test("❌TC03: Registration should fails when passwords do not match", async ({
   await registrationPage.fillConfirmPassword(invalidData[1].confirmPassword);
   await registrationPage.fillPublicInfo(invalidData[1].info);
 
-  // Attempt to submit and verify after successful validation from POM
-  const clicked = await registrationPage.submitIfEnabled();
-  await expect(clicked).toBe(false);
+  await expect(registrationPage.signInButton).toBeDisabled();
 
   // Verify error feedback while taking it from registrationData.js
   await expect(registrationPage.invalidFeedback).toBeVisible();
@@ -106,9 +105,7 @@ test("❌TC04: Registration should fails with missing username", async ({
   await registrationPage.fillConfirmPassword(invalidData[2].confirmPassword);
   await registrationPage.fillPublicInfo(invalidData[2].info);
 
-  // Attempt to submit and verify after successful validation from POM
-  const clicked = await registrationPage.submitIfEnabled();
-  await expect(clicked).toBe(false);
+  await expect(registrationPage.signInButton).toBeDisabled();
 
   // Verify error feedback while taking it from registrationData.js
   await expect(registrationPage.invalidFeedback).toBeVisible();
