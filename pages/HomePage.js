@@ -25,7 +25,7 @@ export class HomePage {
     await this.page.waitForURL(/\/users\/\d+/);
   }
 
-  // Log out the current user
+  // logout the current user
   async logout() {
     await this.logoutButton.click();
   }
